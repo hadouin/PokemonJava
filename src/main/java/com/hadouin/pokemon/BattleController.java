@@ -1,9 +1,17 @@
 package com.hadouin.pokemon;
 
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Transition;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,36 +21,36 @@ public class BattleController {
     private final double MAX_VALUE = 1.7976931348623157E308;
 
     Player player1;
-    int p1CurrentPokemonIndex;
+    Pokemon p1CurrentPokemon;
     Player player2;
-    int p2CurrentPokemonIndex;
+    Pokemon p2CurrentPokemon;
     Player currentPlayer;
     int cpPokemonIndex;
 
-    @FXML
-    public GridPane choicesGrid;
-    @FXML
-    public Label Player1NameLabel;
-    @FXML
-    public Label Player2NameLabel;
-    @FXML
-    public Label Player1PokemonNameLabel;
-    @FXML
-    public Label Player2PokemonNameLabel;
+    @FXML private GridPane choicesGrid;
+    @FXML private Label Player1NameLabel;
+    @FXML private Label Player2NameLabel;
+    @FXML private Label Player1PokemonNameLabel;
+    @FXML private Label Player2PokemonNameLabel;
+    @FXML private PokemonCard playerCard;
+    @FXML private PokemonCard enemyCard;
+    @FXML private Label labelMessage;
 
     BattleController(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
-        p1CurrentPokemonIndex = 0;
-        p2CurrentPokemonIndex = 0;
+        this.p1CurrentPokemon = player1.getPokemons().get(0);
+        this.p2CurrentPokemon = player2.getPokemons().get(0);
         currentPlayer = this.player1;
     }
 
     public void initialize() {
         Player1NameLabel.setText(player1.name);
         Player2NameLabel.setText(player2.name);
-        Player1PokemonNameLabel.setText(player1.pokemons.get(p1CurrentPokemonIndex).getName());
-        Player1PokemonNameLabel.setText(player2.pokemons.get(p2CurrentPokemonIndex).getName());
+        Player1PokemonNameLabel.setText(p1CurrentPokemon.getName());
+        Player2PokemonNameLabel.setText(p2CurrentPokemon.getName());
+        playerCard.setPokemon(p1CurrentPokemon);
+        enemyCard.setPokemon(p2CurrentPokemon);
         chooseAction();
     }
 
@@ -87,16 +95,46 @@ public class BattleController {
     private void doAttack(Attack attack) {
         Pokemon defender;
         if (currentPlayer == player1) {
-            defender = player2.getPokemons().get(p2CurrentPokemonIndex);
-        } else if (currentPlayer == player2) {
-            defender = player1.getPokemons().get(p1CurrentPokemonIndex);
+            defender = p2CurrentPokemon;
+        } else {
+            defender = p1CurrentPokemon;
         }
         castAttackFromTo(attack, currentPlayer.getPokemons().get(cpPokemonIndex), defender);
 
     }
 
     private void castAttackFromTo(Attack attack, Pokemon attacker, Pokemon defender) {
+        clearChoices();
+        sendMessage("C'est super efficace !");
+        defender.losePV(attack.getPower() / 2);
+        playerCard.setPokemon(p1CurrentPokemon);
+        enemyCard.setPokemon(p2CurrentPokemon);
+    }
 
+    public void sendMessage(String string) {
+        String content = string;
+        labelMessage.opacityProperty().setValue(1);
+        final Animation animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(2000));
+            }
+            protected void interpolate(double frac) {
+                final int length = content.length();
+                final int n = Math.round(length * (float) frac);
+                labelMessage.setText(content.substring(0, n));
+            }
+        };
+        SequentialTransition sequentialTransition = new SequentialTransition(animation, new PauseTransition(Duration.seconds(3)));
+        sequentialTransition.play();
+        sequentialTransition.setOnFinished(e -> {
+            labelMessage.opacityProperty().setValue(0);
+            chooseAction();
+        });
+
+    }
+
+    private void clearChoices(){
+        this.choicesGrid.getChildren().clear();
     }
 
 }

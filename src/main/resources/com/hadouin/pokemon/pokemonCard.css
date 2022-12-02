@@ -1,0 +1,17 @@
+@font-face {
+    src: url('./Fonts/pokemon-ds-font.ttf');
+}
+
+.pokemon_font {
+    -fx-font-family: "Pokémon DS Font Regular";
+}
+.pokemon_name {
+    -fx-font-size: 2.5em;
+}
+
+.progress-bar { -fx-box-border: goldenrod; }
+
+.green-bar  { -fx-accent: green;  }
+.yellow-bar { -fx-accent: yellow; }
+.orange-bar { -fx-accent: orange; }
+.red-bar    { -fx-accent: red;    }

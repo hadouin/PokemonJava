@@ -1,6 +1,10 @@
 package com.hadouin.pokemon;
 
 public class Attack {
+    public int getPower() {
+        return this.power;
+    }
+
     enum Base {
         POUND("Écras'face", 40, 35),
         TACKLE("CHARGE", 40, 35);

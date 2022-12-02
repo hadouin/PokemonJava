@@ -8,8 +8,23 @@ public class Pokemon {
         return this.attacks;
     }
 
+    public int getPV() {
+        return this.PV;
+    }
+
+    public int getMaxPV() {
+        return this.maxPV;
+    }
+
+    public void losePV(int power) {
+        this.PV -= power;
+        if (this.PV < 0 ){
+            this.PV = 0;
+        }
+    }
+
     enum Starters {
-        Tiplouf("Tiplouf", Type.WATER, 53, new Attack[]{Attack.Base.POUND.buildAttack()}),
+        Tiplouf("Tiplouf", Type.WATER, 53, new Attack[]{Attack.Base.POUND.buildAttack(), Attack.Base.TACKLE.buildAttack()}),
         Ouisticram("Ouisticram",Type.FIRE, 44),
         Tortipouss("Tortipouss",Type.GRASS, 55, new Attack[]{Attack.Base.TACKLE.buildAttack()}),
 
@@ -52,12 +67,14 @@ public class Pokemon {
 
     private Type type;
     private int PV;
+    private int maxPV;
     private Attack[] attacks;
 
     Pokemon(String name, Type type, int pv, Attack[] attacks){
         this.name = name;
         this.type = type;
         this.PV = pv;
+        this.maxPV = pv;
         this.attacks = attacks;
     }
 
