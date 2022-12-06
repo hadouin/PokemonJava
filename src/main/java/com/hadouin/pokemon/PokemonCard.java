@@ -42,7 +42,6 @@ public class PokemonCard extends AnchorPane {
             throw new RuntimeException(exception);
         }
     }
-
     public void initialize() {
         lifebar.progressProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -78,7 +77,7 @@ public class PokemonCard extends AnchorPane {
     public void setPokemon(Pokemon pokemon) {
         this.pokemon =  pokemon;
         this.name.setText(pokemon.getName().toUpperCase());
-        this.PV.setText(String.valueOf(pokemon.getPV()) + "/" + String.valueOf(pokemon.getMaxPV()));
+        this.PV.setText(pokemon.getPV() + "/" + pokemon.getMaxPV());
         updatePV();
     }
 }

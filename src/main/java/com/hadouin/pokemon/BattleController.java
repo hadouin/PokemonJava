@@ -5,16 +5,10 @@ import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Window;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BattleController {
 
@@ -116,7 +110,7 @@ public class BattleController {
         labelMessage.opacityProperty().setValue(1);
         final Animation animation = new Transition() {
             {
-                setCycleDuration(Duration.millis(2000));
+                setCycleDuration(Duration.millis(1000));
             }
             protected void interpolate(double frac) {
                 final int length = content.length();
