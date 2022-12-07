@@ -21,12 +21,10 @@ public class PokemonCard extends AnchorPane {
     private static final String GREEN_BAR = "green-bar";
     private static final String[] barColorStyleClasses = {RED_BAR, ORANGE_BAR, YELLOW_BAR, GREEN_BAR};
 
-    @FXML
-    ProgressBar lifebar;
-    @FXML
-    Label name;
-    @FXML
-    Label PV;
+    @FXML ProgressBar lifebar;
+    @FXML Label name;
+    @FXML Label lvl;
+    @FXML Label PV;
     Pokemon pokemon;
 
     public PokemonCard() {
@@ -77,6 +75,7 @@ public class PokemonCard extends AnchorPane {
     public void setPokemon(Pokemon pokemon) {
         this.pokemon =  pokemon;
         this.name.setText(pokemon.getName().toUpperCase());
+        this.lvl.setText("lv." + pokemon.getLVL());
         this.PV.setText(pokemon.getPV() + "/" + pokemon.getMaxPV());
         updatePV();
     }

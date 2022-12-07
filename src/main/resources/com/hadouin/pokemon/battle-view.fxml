@@ -17,33 +17,30 @@
           prefHeight="740.0" prefWidth="620.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/19"
           xmlns:fx="http://javafx.com/fxml/1">
         <Label text="Fight!"/>
-        <GridPane prefHeight="300" prefWidth="560.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints maxHeight="283.0" minHeight="0.0" prefHeight="279.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <ImageView fx:id="playerImage" fitHeight="150.0" fitWidth="246.0" pickOnBounds="true" preserveRatio="true"
-                       GridPane.halignment="RIGHT" GridPane.rowIndex="0" GridPane.valignment="BOTTOM">
-                <GridPane.margin>
-                    <Insets right="50.0"/>
-                </GridPane.margin>
-                <Image url="@PokemonSprites/Tiplouf/back.png"/>
-            </ImageView>
-            <PokemonCard fx:id="enemyCard" GridPane.rowIndex="0"/>
-            <ImageView fx:id="enemyImage" fitHeight="150.0" fitWidth="276.0" pickOnBounds="true" preserveRatio="true"
-                       GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0"
-                       GridPane.valignment="TOP">
-                <GridPane.margin>
-                    <Insets left="50.0"/>
-                </GridPane.margin>
-                <Image url="@PokemonSprites/Tortipouss/front.png"/>
-            </ImageView>
-            <PokemonCard fx:id="playerCard" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1"
-                         GridPane.rowIndex="0" GridPane.valignment="BOTTOM"/>
-        </GridPane>
+        <AnchorPane prefHeight="269.0" prefWidth="580.0">
+            <children>
+                <ImageView fitHeight="272.0" fitWidth="580.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0">
+                    <image>
+                        <Image url="@bg.jpg" />
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="232.0" fitWidth="580.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0">
+                    <image>
+                        <Image url="@base.png" />
+                    </image>
+                </ImageView>
+                <ImageView fx:id="playerImage" fitHeight="150.0" fitWidth="246.0" layoutX="58.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-12.0">
+                    <Image url="@PokemonSprites/Tiplouf/back.png" />
+                </ImageView>
+                <ImageView fx:id="enemyImage" fitHeight="150.0" fitWidth="276.0" layoutX="360.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@PokemonSprites/Tortipouss/front.png" />
+                </ImageView>
+                <PokemonCard fx:id="enemyCard" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="20.0">
+                </PokemonCard>
+                <PokemonCard fx:id="playerCard" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="0.0">
+                </PokemonCard>
+            </children>
+        </AnchorPane>
         <Label fx:id="labelMessage" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308"
                prefHeight="95.0" prefWidth="560.0" styleClass="pokemon_font" stylesheets="@pokemonCard.css"
                wrapText="true" VBox.vgrow="ALWAYS">
