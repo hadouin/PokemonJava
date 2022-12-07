@@ -51,6 +51,7 @@ public class Main extends Application {
         // sampleRun1();
         Player player1 = new Player("Hadouin");
         player1.addPokemon(Pokemon.Starters.Tiplouf.buildPokemon());
+        player1.addPokemon(Pokemon.Starters.Ouisticram.buildPokemon());
         Player player2 = new Player("Sacha");
         player2.addPokemon(Pokemon.Starters.Tortipouss.buildPokemon());
 

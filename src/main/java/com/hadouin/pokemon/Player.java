@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    String name;
-    List<Pokemon> pokemons;
+    private String name;
+    private List<Pokemon> pokemons;
 
     Player(String name) {
         this.name = name;
@@ -17,5 +17,9 @@ public class Player {
     }
     public List<Pokemon> getPokemons(){
         return this.pokemons;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
