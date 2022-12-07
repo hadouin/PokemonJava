@@ -4,10 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,38 +11,34 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
-import java.util.function.Function;
-
 public class BattleController {
 
     private final double MAX_VALUE = 1.7976931348623157E308;
-    Player player1;
-    Pokemon p1CurrentPokemon;
-    Player player2;
-    Pokemon p2CurrentPokemon;
+    Player player;
+    Pokemon playerPokemon;
+    Player enemy;
+    Pokemon enemyPokemon;
     Player currentPlayer;
-    int cpPokemonIndex;
+    Pokemon currentPokemon;
 
     @FXML private GridPane choicesGrid;
 
-    @FXML private Label Player1NameLabel;
-    @FXML private Label Player1PokemonNameLabel;
     @FXML private PokemonCard playerCard;
     @FXML private ImageView playerImage;
 
-    @FXML private Label Player2NameLabel;
-    @FXML private Label Player2PokemonNameLabel;
     @FXML private PokemonCard enemyCard;
     @FXML private ImageView enemyImage;
 
     @FXML private Label labelMessage;
+    @FXML private Label actionLabel;
 
-    BattleController(Player player1, Player player2) {
-        this.player1 = player1;
-        this.player2 = player2;
-        this.p1CurrentPokemon = player1.getPokemons().get(0);
-        this.p2CurrentPokemon = player2.getPokemons().get(0);
-        currentPlayer = this.player1;
+    BattleController(Player player, Player enemy) {
+        this.player = player;
+        this.enemy = enemy;
+        this.playerPokemon = player.getPokemons().get(0);
+        this.enemyPokemon = enemy.getPokemons().get(0);
+        currentPlayer = this.player;
+        currentPokemon = this.playerPokemon;
     }
 
     public void initialize() {
@@ -55,14 +47,11 @@ public class BattleController {
     }
 
     private void update() {
-        Player1NameLabel.setText(player1.getName());
-        Player2NameLabel.setText(player2.getName());
-        Player1PokemonNameLabel.setText(p1CurrentPokemon.getName());
-        Player2PokemonNameLabel.setText(p2CurrentPokemon.getName());
-        playerCard.setPokemon(p1CurrentPokemon);
-        enemyCard.setPokemon(p2CurrentPokemon);
-        playerImage.setImage(p1CurrentPokemon.getImageBack());
-        enemyImage.setImage(p2CurrentPokemon.getImageFront());
+        playerCard.setPokemon(playerPokemon);
+        enemyCard.setPokemon(enemyPokemon);
+        playerImage.setImage(playerPokemon.getImageBack());
+        enemyImage.setImage(enemyPokemon.getImageFront());
+        actionLabel.setText(currentPlayer.getName());
     }
 
     private void chooseAction() {
@@ -87,17 +76,16 @@ public class BattleController {
         clearChoices();
         int x = 0;
         int y = 0;
-        Attack[] currentAttacks = currentPlayer.getPokemons().get(cpPokemonIndex).getAttacks();
-        for ( Attack attack : currentAttacks) {
-            if (attack != null) {
-                Button button = new Button(attack.getName());
-                button.setMaxWidth(MAX_VALUE);
-                button.setMaxHeight(MAX_VALUE);
-                button.setOnAction(e -> {
-                    doAttack(attack);
-                });
-                this.choicesGrid.add(button, x, y);
-            }
+        for ( Attack attack : currentPokemon.getAttacks()) {
+
+            Button button = new Button(attack.getName());
+            button.setMaxWidth(MAX_VALUE);
+            button.setMaxHeight(MAX_VALUE);
+            button.setOnAction(e -> {
+                doAttack(attack);
+            });
+            this.choicesGrid.add(button, x, y);
+
             x++;
             if (x > 1){
                 y++;
@@ -107,22 +95,18 @@ public class BattleController {
     }
 
     private void doAttack(Attack attack) {
-        Pokemon defender;
-        if (currentPlayer == player1) {
-            defender = p2CurrentPokemon;
+        if (currentPlayer == player) {
+            castAttackFromTo(attack, playerPokemon, enemyPokemon);
         } else {
-            defender = p1CurrentPokemon;
+            castAttackFromTo(attack, enemyPokemon, playerPokemon);
         }
-        castAttackFromTo(attack, currentPlayer.getPokemons().get(cpPokemonIndex), defender);
-
     }
 
     private void castAttackFromTo(Attack attack, Pokemon attacker, Pokemon defender) {
         clearChoices();
-        sendMessage("C'est super efficace !", this::chooseAction);
         defender.losePV(attack.getPower() / 2);
-        playerCard.setPokemon(p1CurrentPokemon);
-        enemyCard.setPokemon(p2CurrentPokemon);
+        update();
+        sendMessage("C'est super efficace !", this::nextPlayer);
     }
 
     private interface IVoid {
@@ -176,26 +160,29 @@ public class BattleController {
     }
 
     private void changePokemon(Pokemon pokemon) {
-        if (this.currentPlayer == player1){
-            p1CurrentPokemon = pokemon;
+        if (this.currentPlayer == player){
+            playerPokemon = pokemon;
             update();
             clearChoices();
-            sendMessage(p1CurrentPokemon.getName() + " à toi de jouer !", this::chooseAction);
+            sendMessage(playerPokemon.getName() + " à toi de jouer !", this::nextPlayer);
         }
-        if (this.currentPlayer == player2){
-            p2CurrentPokemon = pokemon;
+        if (this.currentPlayer == enemy){
+            enemyPokemon = pokemon;
             update();
             clearChoices();
-            sendMessage(p2CurrentPokemon.getName() + " à toi de jouer !", this::chooseAction);
+            sendMessage(enemyPokemon.getName() + " à toi de jouer !", this::nextPlayer);
         }
     }
 
     private void nextPlayer(){
-        if (currentPlayer == player1) {
-            currentPlayer = player2;
+        if (currentPlayer == player) {
+            currentPlayer = enemy;
+            currentPokemon = enemyPokemon;
+        } else {
+            currentPlayer = player;
+            currentPokemon = playerPokemon;
         }
-        if (currentPlayer == player2) {
-            currentPlayer = player1;
-        }
+        update();
+        chooseAction();
     }
 }

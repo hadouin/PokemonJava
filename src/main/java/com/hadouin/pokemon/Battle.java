@@ -22,7 +22,7 @@ public class Battle {
         FXMLLoader fxmlLoader = new FXMLLoader(Battle.class.getResource("battle-view.fxml"));
         fxmlLoader.setController(battleController);
 
-        Scene scene = new Scene(fxmlLoader.load(), 600, 780);
+        Scene scene = new Scene(fxmlLoader.load(), 620, 700);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
