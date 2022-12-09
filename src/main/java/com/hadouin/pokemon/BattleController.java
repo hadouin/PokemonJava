@@ -105,8 +105,14 @@ public class BattleController {
     private void castAttackFromTo(Attack attack, Pokemon attacker, Pokemon defender) {
         clearChoices();
         defender.losePV(attack.getPower() / 2);
-        update();
-        sendMessage("C'est super efficace !", this::nextPlayer);
+        if (defender.getPV() == 0) {
+            nextPlayer();
+            clearChoices();
+            sendMessage(defender.getName() + " est K.O. Choisir un nouveau pokemon: ", this::choosePokemon );
+        } else {
+            update();
+            sendMessage("C'est super efficace !", this::nextPlayer);
+        }
     }
 
     private interface IVoid {

@@ -23,7 +23,7 @@ public class Battle {
         fxmlLoader.setController(battleController);
 
         Scene scene = new Scene(fxmlLoader.load(), 620, 700);
-        stage.setTitle("Hello!");
+        stage.setTitle("Battle!");
         stage.setScene(scene);
         stage.show();
     }
