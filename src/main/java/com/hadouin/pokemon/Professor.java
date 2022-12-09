@@ -1,11 +1,11 @@
 package com.hadouin.pokemon;
 
-import com.hadouin.pokemon.Pokemon.Starters;
+import com.hadouin.pokemon.StarterPokemons;
 
 public enum Professor {
-    SORBIER("Sorbier", new Pokemon[]{Starters.Tiplouf.buildPokemon(), Starters.Ouisticram.buildPokemon(), Starters.Tortipouss.buildPokemon()}),
-    SEKO("Seko", new Pokemon[]{Starters.Arcko.buildPokemon(), Starters.Poussifeu.buildPokemon(), Starters.Gobou.buildPokemon()}),
-    CHEN("Chen", new Pokemon[]{Starters.Bulbizarre.buildPokemon(), Starters.Salamèche.buildPokemon(), Starters.Carapuce.buildPokemon()}),
+    SORBIER("Sorbier", new Pokemon[]{StarterPokemons.Tiplouf.buildPokemon(), StarterPokemons.Ouisticram.buildPokemon(), StarterPokemons.Tortipouss.buildPokemon()}),
+    SEKO("Seko", new Pokemon[]{StarterPokemons.Arcko.buildPokemon(), StarterPokemons.Poussifeu.buildPokemon(), StarterPokemons.Gobou.buildPokemon()}),
+    CHEN("Chen", new Pokemon[]{StarterPokemons.Bulbizarre.buildPokemon(), StarterPokemons.Salamèche.buildPokemon(), StarterPokemons.Carapuce.buildPokemon()}),
     ;
 
     private String name;

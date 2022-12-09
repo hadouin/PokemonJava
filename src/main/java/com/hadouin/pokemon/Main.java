@@ -1,18 +1,13 @@
 package com.hadouin.pokemon;
 
-import com.hadouin.utils.ConsoleInterface;
 import com.hadouin.utils.GUI;
 import com.hadouin.utils.InputParser;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Main extends Application {
-    // static InputParser inputParser = new ConsoleInterface(System.in, System.out);
     static InputParser inputParser = new GUI();
 
     private static Pokemon choosePokemon(Pokemon[] pokemons){
@@ -50,11 +45,13 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         // sampleRun1();
         Player player1 = new Player("Hadouin");
-        player1.addPokemon(Pokemon.Starters.Tiplouf.buildPokemon());
-        player1.addPokemon(Pokemon.Starters.Ouisticram.buildPokemon());
+        player1.addPokemon(StarterPokemons.Ouisticram.buildPokemon());
+        player1.addPokemon(StarterPokemons.Tortipouss.buildPokemon());
+        player1.addPokemon(StarterPokemons.Tiplouf.buildPokemon());
         Player player2 = new Player("Sacha");
-        player2.addPokemon(Pokemon.Starters.Tortipouss.buildPokemon());
-
+        player2.addPokemon(StarterPokemons.Tortipouss.buildPokemon());
+        player2.addPokemon(StarterPokemons.Tiplouf.buildPokemon());
+        player2.addPokemon(StarterPokemons.Ouisticram.buildPokemon());
         Battle battle = new Battle(player1, player2);
         battle.start(stage);
     }

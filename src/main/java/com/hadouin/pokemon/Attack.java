@@ -1,41 +1,35 @@
 package com.hadouin.pokemon;
 
 public class Attack {
-    public int getPower() {
-        return this.power;
-    }
-
-    enum Base {
-        POUND("Écras'face", 40, 35),
-        TACKLE("CHARGE", 40, 35);
-        private String name;
-        private int power;
-        private int PP;
-        Base(String name, int power, int pp) {
-            this.name = name;
-            this.power = power;
-            this.PP = pp;
-        }
-        public Attack buildAttack(){
-            return new Attack(this);
-        }
-    }
     private String name;
     private int power;
     private int PP;
     private int maxPP;
+    private Type type = Type.NORMAL;
+    private BaseAttack baseAttack;
 
-    public Attack(String name, int power, int pp) {
+    Attack(String name, int power, int pp, Type type, BaseAttack baseAttack) {
         this.name = name;
         this.power = power;
         this.PP = pp;
         this.maxPP = pp;
+        this.type = type;
+        this.baseAttack = baseAttack;
     }
-    Attack(Base baseAttack) {
-        this(baseAttack.name, baseAttack.power, baseAttack.PP);
+    Attack(BaseAttack baseAttack) {
+        this(baseAttack.name, baseAttack.power, baseAttack.PP, baseAttack.type, baseAttack);
     }
 
     public String getName() {
         return this.name;
+    }
+    public int getPower() {
+        return this.power;
+    }
+    public String getAttackFactorString(Pokemon defender) {
+        return this.baseAttack.getAttackFactorString(defender);
+    }
+    public void cast(Pokemon attacker,Pokemon defender){
+        this.baseAttack.cast(attacker, defender);
     }
 }

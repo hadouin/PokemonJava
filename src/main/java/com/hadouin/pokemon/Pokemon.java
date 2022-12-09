@@ -5,61 +5,6 @@ import com.hadouin.utils.InputParser;
 import javafx.scene.image.Image;
 
 public class Pokemon {
-    public Attack[] getAttacks() {
-        return this.attacks;
-    }
-
-    public int getPV() {
-        return this.PV;
-    }
-
-    public int getMaxPV() {
-        return this.maxPV;
-    }
-
-    public void losePV(int power) {
-        this.PV -= power;
-        if (this.PV < 0 ){
-            this.PV = 0;
-        }
-    }
-
-    enum Starters {
-        Tiplouf("Tiplouf", Type.WATER, 53, new Attack[]{Attack.Base.POUND.buildAttack(), Attack.Base.TACKLE.buildAttack()}),
-        Ouisticram("Ouisticram",Type.FIRE, 44, new Attack[]{Attack.Base.POUND.buildAttack()}),
-        Tortipouss("Tortipouss",Type.GRASS, 55, new Attack[]{Attack.Base.TACKLE.buildAttack()}),
-
-        Arcko("Arcko", Type.GRASS, 40),
-        Poussifeu("Poussifeu", Type.FIRE, 45 ),
-        Gobou("Gobou", Type.WATER, 50),
-
-        Bulbizarre("Bulbizarre", Type.GRASS, 45),
-        Salamèche("Salamèche", Type.FIRE, 39),
-        Carapuce("Carapuce", Type.WATER, 44);
-
-        private String name;
-        private Type type;
-        private int PV;
-        private Attack[] attacks = new Attack[4];
-
-        Starters(String name, Type type, int pv) {
-            this.name = name;
-            this.type = type;
-            this.PV = pv;
-        }
-        Starters(String name, Type type, int pv, Attack[] attacks) {
-            this.name = name;
-            this.type = type;
-            this.PV = pv;
-            this.attacks = attacks;
-        }
-
-
-        Pokemon buildPokemon(){
-            return new Pokemon(this);
-        }
-    }
-
     private String name;
     public String getName() {
         return this.name;
@@ -80,8 +25,20 @@ public class Pokemon {
     public Image getImageBack(){
         return this.back;
     }
+
     public int getLVL(){
         return this.LVL;
+    }
+    public Attack[] getAttacks() {
+        return this.attacks;
+    }
+
+    public int getPV() {
+        return this.PV;
+    }
+
+    public int getMaxPV() {
+        return this.maxPV;
     }
 
     Pokemon(String name, Type type, int pv, Attack[] attacks){
@@ -101,9 +58,32 @@ public class Pokemon {
         }
     }
 
-    Pokemon(Starters starter){
+    public int losePV(int pv) {
+        if (this.PV == 0){
+            return 0;
+        }
+        this.PV -= pv;
+        if (this.PV < 0){
+            int lostPV = pv + this.PV;
+            this.PV = 0;
+            return lostPV;
+        }
+        return pv;
+    }
+
+    Pokemon(StarterPokemons starter){
         this(starter.name, starter.type, starter.PV, starter.attacks);
         this.LVL = 5;
     }
 
+    public void gainPV(int pv) {
+        this.PV += pv;
+        if (this.PV > this.maxPV){
+            this.PV = this.maxPV;
+        }
+    }
+
+    public Type getType() {
+        return this.type;
+    }
 }

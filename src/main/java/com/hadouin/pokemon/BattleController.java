@@ -2,7 +2,6 @@ package com.hadouin.pokemon;
 
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -31,6 +30,7 @@ public class BattleController {
 
     @FXML private Label labelMessage;
     @FXML private Label actionLabel;
+    private String moveMessage;
 
     BattleController(Player player, Player enemy) {
         this.player = player;
@@ -43,6 +43,7 @@ public class BattleController {
 
     public void initialize() {
         update();
+        setMessage("C'est au tour de " + currentPlayer.getName());
         chooseAction();
     }
 
@@ -95,50 +96,59 @@ public class BattleController {
     }
 
     private void doAttack(Attack attack) {
-        if (currentPlayer == player) {
-            castAttackFromTo(attack, playerPokemon, enemyPokemon);
-        } else {
-            castAttackFromTo(attack, enemyPokemon, playerPokemon);
-        }
+        Pokemon attacker;
+        Pokemon defender;
+        attacker = currentPokemon;
+        defender = (currentPokemon == playerPokemon) ? enemyPokemon : playerPokemon;
+        clearChoices();
+        setMessage(attacker.getName() + " utilise " + attack.getName());
+        attack.cast(attacker, defender);
+        update();
+        this.moveMessage = attack.getAttackFactorString(defender);
+        doAfter(this::afterAttack, 3000);
     }
 
-    private void castAttackFromTo(Attack attack, Pokemon attacker, Pokemon defender) {
-        clearChoices();
-        defender.losePV(attack.getPower() / 2);
+    private void afterAttack() {
+        Pokemon defender = (currentPokemon == playerPokemon) ? enemyPokemon : playerPokemon;
         if (defender.getPV() == 0) {
             nextPlayer();
             clearChoices();
-            sendMessage(defender.getName() + " est K.O. Choisir un nouveau pokemon: ", this::choosePokemon );
+            setMessage(defender.getName() + " est K.O. Choisir un nouveau pokemon: ");
+            doAfter(this::choosePokemon, 3000);
         } else {
-            update();
-            sendMessage("C'est super efficace !", this::nextPlayer);
+            setMessage(moveMessage);
+            doAfter(this::nextPlayer, 3000);
         }
     }
 
     private interface IVoid {
-        public abstract void doit();
+        void doit();
     }
 
-    public void sendMessage(String string, IVoid onFinish) {
-        String content = string;
-        labelMessage.opacityProperty().setValue(1);
+    private void setMessage(String string) {
         final Animation animation = new Transition() {
             {
                 setCycleDuration(Duration.millis(1000));
             }
             protected void interpolate(double frac) {
-                final int length = content.length();
+                final int length = string.length();
                 final int n = Math.round(length * (float) frac);
-                labelMessage.setText(content.substring(0, n));
+                labelMessage.setText(string.substring(0, n));
             }
         };
-        SequentialTransition sequentialTransition = new SequentialTransition(animation, new PauseTransition(Duration.seconds(3)));
-        sequentialTransition.play();
-        sequentialTransition.setOnFinished(e -> {
-            labelMessage.opacityProperty().setValue(0);
-            onFinish.doit();
-        });
+        animation.play();
+    }
 
+    private void clearMessage(){
+        labelMessage.setText("");
+    }
+
+    private void doAfter(IVoid todo, int millis){
+        PauseTransition pauseTransition = new PauseTransition((Duration.millis(millis)));
+        pauseTransition.setOnFinished(e -> {
+            todo.doit();
+        });
+        pauseTransition.play();
     }
 
     private void clearChoices(){
@@ -170,14 +180,15 @@ public class BattleController {
             playerPokemon = pokemon;
             update();
             clearChoices();
-            sendMessage(playerPokemon.getName() + " à toi de jouer !", this::nextPlayer);
+            setMessage(playerPokemon.getName() + " à toi de jouer !");
         }
         if (this.currentPlayer == enemy){
             enemyPokemon = pokemon;
             update();
             clearChoices();
-            sendMessage(enemyPokemon.getName() + " à toi de jouer !", this::nextPlayer);
+            setMessage(enemyPokemon.getName() + " à toi de jouer !");
         }
+        doAfter(this::nextPlayer, 3000);
     }
 
     private void nextPlayer(){
