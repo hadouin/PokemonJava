@@ -19,27 +19,6 @@ public class Pokemon {
     private Attack[] attacks;
     private Image back;
     private Image front;
-    public Image getImageFront(){
-        return this.front;
-    }
-    public Image getImageBack(){
-        return this.back;
-    }
-
-    public int getLVL(){
-        return this.LVL;
-    }
-    public Attack[] getAttacks() {
-        return this.attacks;
-    }
-
-    public int getPV() {
-        return this.PV;
-    }
-
-    public int getMaxPV() {
-        return this.maxPV;
-    }
 
     Pokemon(String name, Type type, int pv, Attack[] attacks){
         this.name = name;
@@ -49,6 +28,15 @@ public class Pokemon {
         this.attacks = attacks;
         this.front = new Image(this.getClass().getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
         this.back = new Image(this.getClass().getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
+    }
+
+    Pokemon(StarterPokemons starter){
+        this(starter.name, starter.type, starter.PV, starter.attacks);
+        this.LVL = 5;
+    }
+
+    public boolean isFainted() {
+        return this.PV <= 0;
     }
 
     public void askNickname() {
@@ -71,11 +59,6 @@ public class Pokemon {
         return pv;
     }
 
-    Pokemon(StarterPokemons starter){
-        this(starter.name, starter.type, starter.PV, starter.attacks);
-        this.LVL = 5;
-    }
-
     public void gainPV(int pv) {
         this.PV += pv;
         if (this.PV > this.maxPV){
@@ -86,4 +69,26 @@ public class Pokemon {
     public Type getType() {
         return this.type;
     }
+    public Image getImageFront(){
+        return this.front;
+    }
+    public Image getImageBack(){
+        return this.back;
+    }
+
+    public int getLVL(){
+        return this.LVL;
+    }
+    public Attack[] getAttacks() {
+        return this.attacks;
+    }
+
+    public int getPV() {
+        return this.PV;
+    }
+
+    public int getMaxPV() {
+        return this.maxPV;
+    }
+
 }
