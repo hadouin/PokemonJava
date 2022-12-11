@@ -15,25 +15,24 @@ public class Pokemon {
     private int PV;
     private int maxPV;
     private int XP = 0;
-    private int LVL;
 
-    private Attack[] attacks;
+    private Move[] moves;
     private Image back;
     private Image front;
 
-    Pokemon(String name, Type type, int pv, Attack[] attacks){
+    Pokemon(String name, Type type, int pv, Move[] moves){
         this.name = name;
         this.type = type;
         this.PV = pv;
         this.maxPV = pv;
-        this.attacks = attacks;
+        this.moves = moves;
         this.front = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
         this.back = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
     }
 
     Pokemon(StarterPokemons starter){
-        this(starter.name, starter.type, starter.PV, starter.attacks);
-        this.LVL = 5;
+        this(starter.name, starter.type, starter.PV, starter.moves);
+        this.XP = 63;
     }
 
     public boolean isFainted() {
@@ -78,10 +77,17 @@ public class Pokemon {
     }
 
     public int getLVL(){
-        return this.LVL;
+        int[] myXpTable = Levels.FAST.getTableXpLevel();
+        // get first value that is not reached
+        for (int i = 0; i<myXpTable.length; i++){
+            if (myXpTable[i]> this.XP) {
+                return i - 1;
+            }
+        }
+        return 100;
     }
-    public Attack[] getAttacks() {
-        return this.attacks;
+    public Move[] getAttacks() {
+        return this.moves;
     }
 
     public int getPV() {

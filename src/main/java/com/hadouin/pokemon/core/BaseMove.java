@@ -2,7 +2,7 @@ package com.hadouin.pokemon.core;
 
 import java.util.Random;
 
-enum BaseAttack {
+enum BaseMove {
     POUND("Écras'face", 40, 35),
     SCRATCH("Griffe", 40, 35),
     TACKLE("CHARGE", 40, 35),
@@ -21,20 +21,20 @@ enum BaseAttack {
     int power;
     int PP;
     Type type;
-    BaseAttack(String name, int power, int pp) {
+    BaseMove(String name, int power, int pp) {
         this.name = name;
         this.power = power;
         this.PP = pp;
         this.type = Type.NORMAL;
     }
-    BaseAttack(String name, int power, int pp, Type type) {
+    BaseMove(String name, int power, int pp, Type type) {
         this.name = name;
         this.power = power;
         this.PP = pp;
         this.type = type;
     }
-    public Attack buildAttack(){
-        return new Attack(this);
+    public Move buildAttack(){
+        return new Move(this);
     }
 
     public double getRandom(){

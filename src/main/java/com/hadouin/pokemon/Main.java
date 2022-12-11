@@ -4,6 +4,8 @@ import com.hadouin.pokemon.core.*;
 import com.hadouin.utils.GUI;
 import com.hadouin.utils.InputParser;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -45,16 +47,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // sampleRun1();
-        Player player1 = new Player("Hadouin");
-        player1.addPokemon(StarterPokemons.Ouisticram.buildPokemon());
-        player1.addPokemon(StarterPokemons.Tortipouss.buildPokemon());
-        player1.addPokemon(StarterPokemons.Tiplouf.buildPokemon());
-        Player player2 = new Player("Sacha");
-        player2.addPokemon(StarterPokemons.Tortipouss.buildPokemon());
-        player2.addPokemon(StarterPokemons.Tiplouf.buildPokemon());
-        player2.addPokemon(StarterPokemons.Ouisticram.buildPokemon());
-        Battle battle = new Battle(player1, player2);
-        battle.start(stage);
+        setUserAgentStylesheet(Application.STYLESHEET_CASPIAN);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("menu-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Battle!");
+        stage.setScene(scene);
+        stage.show();
     }
 
     private static void sampleRun1() {

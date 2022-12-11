@@ -1,9 +1,9 @@
 package com.hadouin.pokemon.core;
 
 public enum StarterPokemons {
-    Tiplouf("Tiplouf", Type.WATER, 53, new Attack[]{BaseAttack.POUND.buildAttack(), BaseAttack.BUBBLES.buildAttack()}),
-    Ouisticram("Ouisticram",Type.FIRE, 44, new Attack[]{BaseAttack.SCRATCH.buildAttack(), BaseAttack.EMBER.buildAttack()}),
-    Tortipouss("Tortipouss",Type.GRASS, 55, new Attack[]{BaseAttack.TACKLE.buildAttack(), BaseAttack.ABSORB.buildAttack()}),
+    Tiplouf("Tiplouf", Type.WATER, 53, new Move[]{BaseMove.POUND.buildAttack(), BaseMove.BUBBLES.buildAttack()}),
+    Ouisticram("Ouisticram",Type.FIRE, 44, new Move[]{BaseMove.SCRATCH.buildAttack(), BaseMove.EMBER.buildAttack()}),
+    Tortipouss("Tortipouss",Type.GRASS, 55, new Move[]{BaseMove.TACKLE.buildAttack(), BaseMove.ABSORB.buildAttack()}),
 
     Arcko("Arcko", Type.GRASS, 40),
     Poussifeu("Poussifeu", Type.FIRE, 45 ),
@@ -16,18 +16,18 @@ public enum StarterPokemons {
     String name;
     Type type;
     int PV;
-    Attack[] attacks = new Attack[4];
+    Move[] moves = new Move[4];
 
     StarterPokemons(String name, Type type, int pv) {
         this.name = name;
         this.type = type;
         this.PV = pv;
     }
-    StarterPokemons(String name, Type type, int pv, Attack[] attacks) {
+    StarterPokemons(String name, Type type, int pv, Move[] moves) {
         this.name = name;
         this.type = type;
         this.PV = pv;
-        this.attacks = attacks;
+        this.moves = moves;
     }
 
 

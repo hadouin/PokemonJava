@@ -5,6 +5,7 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -13,14 +14,17 @@
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="72.0" prefWidth="250.0" style="-fx-background-color: e0e0e0; -fx-border-color: #2e2e2e; -fx-border-width: 2; -fx-border-radius: 4; -fx-background-radius: 4;" stylesheets="@pokemonCard.css" type="AnchorPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <Group layoutX="113.0" layoutY="33.0" AnchorPane.rightAnchor="0.0">
       <children>
-         <Rectangle arcHeight="10.0" arcWidth="8.0" fill="#2e2e2e" height="18.0" smooth="false" stroke="#2e2e2e" strokeType="INSIDE" width="169.0" />
-         <ProgressBar fx:id="lifebar" layoutX="19.0" prefHeight="18.0" prefWidth="150.0" progress="1.0" style="-fx-background-insets: 1 1 2 1; -fx-padding: 0.2em;" />
-         <Text fill="#c4282d" layoutX="5.0" layoutY="14.0" stroke="#c4282d" strokeWidth="1.5" styleClass="pokemon_font" text="H">
+         <Rectangle arcHeight="10.0" arcWidth="8.0" fill="#2e2e2e" height="16.0" smooth="false" stroke="#2e2e2e" strokeType="INSIDE" width="169.0" />
+         <ProgressBar fx:id="lifebar" layoutX="22.0" layoutY="3.0" prefHeight="10.0" prefWidth="143.0" progress="1.0" style="-fx-border-width: 0;">
+            <effect>
+               <Blend />
+            </effect></ProgressBar>
+         <Text fill="#c4282d" layoutX="5.0" layoutY="12.0" stroke="#c4282d" strokeWidth="1.5" styleClass="pokemon_font" text="H">
             <font>
                <Font size="16.0" />
             </font>
          </Text>
-         <Text fill="#c4282d" layoutX="13.0" layoutY="14.0" stroke="#c4282d" strokeWidth="1.5" styleClass="pokemon_font" text="P">
+         <Text fill="#c4282d" layoutX="13.0" layoutY="12.0" stroke="#c4282d" strokeWidth="1.5" styleClass="pokemon_font" text="P">
             <font>
                <Font size="16.0" />
             </font>
@@ -37,7 +41,7 @@
          <Font size="18.0" />
       </font>
    </Label>
-   <Label fx:id="lvl" layoutX="263.0" layoutY="5.0" prefHeight="30.0" prefWidth="34.0" styleClass="pokemon_font" stylesheets="@pokemonCard.css" text="lv.00" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+   <Label fx:id="lvl" layoutX="263.0" layoutY="5.0" prefHeight="30.0" prefWidth="34.0" styleClass="pokemon_font" stylesheets="@pokemonCard.css" text="lv00" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
       <font>
          <Font size="20.0" />
       </font>

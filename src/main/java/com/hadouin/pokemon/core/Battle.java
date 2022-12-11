@@ -2,6 +2,7 @@ package com.hadouin.pokemon.core;
 
 import com.hadouin.pokemon.Main;
 import com.hadouin.pokemon.controller.BattleController;
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

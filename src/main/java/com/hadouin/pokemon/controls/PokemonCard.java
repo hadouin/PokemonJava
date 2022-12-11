@@ -69,7 +69,7 @@ public class PokemonCard extends AnchorPane {
         double progressValue = (double) pokemon.getPV() / pokemon.getMaxPV();
         final Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(0),    new KeyValue(lifebar.progressProperty(), lifebar.progressProperty().getValue())),
-                new KeyFrame(Duration.millis(3000), new KeyValue(lifebar.progressProperty(), progressValue))
+                new KeyFrame(Duration.millis(1200), new KeyValue(lifebar.progressProperty(), progressValue))
         );
         timeline.play();
     }

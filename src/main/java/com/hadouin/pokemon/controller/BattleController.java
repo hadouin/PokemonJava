@@ -1,7 +1,7 @@
 package com.hadouin.pokemon.controller;
 
 import com.hadouin.pokemon.controls.PokemonCard;
-import com.hadouin.pokemon.core.Attack;
+import com.hadouin.pokemon.core.Move;
 import com.hadouin.pokemon.core.Player;
 import com.hadouin.pokemon.core.Pokemon;
 import javafx.animation.Animation;
@@ -81,13 +81,13 @@ public class BattleController {
         clearChoices();
         int x = 0;
         int y = 0;
-        for ( Attack attack : currentPokemon.getAttacks()) {
+        for ( Move move : currentPokemon.getAttacks()) {
 
-            Button button = new Button(attack.getName());
+            Button button = new Button(move.getName());
             button.setMaxWidth(MAX_VALUE);
             button.setMaxHeight(MAX_VALUE);
             button.setOnAction(e -> {
-                doAttack(attack);
+                doAttack(move);
             });
             this.choicesGrid.add(button, x, y);
 
@@ -99,16 +99,16 @@ public class BattleController {
         }
     }
 
-    private void doAttack(Attack attack) {
+    private void doAttack(Move move) {
         Pokemon attacker;
         Pokemon defender;
         attacker = currentPokemon;
         defender = (currentPokemon == playerPokemon) ? enemyPokemon : playerPokemon;
         clearChoices();
-        setMessage(attacker.getName() + " utilise " + attack.getName());
-        attack.cast(attacker, defender);
+        setMessage(attacker.getName() + " utilise " + move.getName());
+        move.cast(attacker, defender);
         update();
-        this.moveMessage = attack.getAttackFactorString(defender);
+        this.moveMessage = move.getAttackFactorString(defender);
         doAfter(this::afterAttack, 3000);
     }
 
@@ -167,9 +167,11 @@ public class BattleController {
             Button button = new Button(pokemon.getName() + " " + pokemon.getPV() +"/"+ pokemon.getMaxPV());
             button.setMaxWidth(MAX_VALUE);
             button.setMaxHeight(MAX_VALUE);
-            button.setOnAction(e -> {
-                changePokemon(pokemon);
-            });
+            if (!pokemon.isFainted()) {
+                button.setOnAction(e -> {
+                    changePokemon(pokemon);
+                });
+            }
             this.choicesGrid.add(button, x,y);
             x++;
             if (x > 1) {

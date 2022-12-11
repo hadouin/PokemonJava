@@ -1,23 +1,23 @@
 package com.hadouin.pokemon.core;
 
-public class Attack {
+public class Move {
     private String name;
     private int power;
     private int PP;
     private int maxPP;
     private Type type = Type.NORMAL;
-    private BaseAttack baseAttack;
+    private BaseMove baseMove;
 
-    Attack(String name, int power, int pp, Type type, BaseAttack baseAttack) {
+    Move(String name, int power, int pp, Type type, BaseMove baseMove) {
         this.name = name;
         this.power = power;
         this.PP = pp;
         this.maxPP = pp;
         this.type = type;
-        this.baseAttack = baseAttack;
+        this.baseMove = baseMove;
     }
-    Attack(BaseAttack baseAttack) {
-        this(baseAttack.name, baseAttack.power, baseAttack.PP, baseAttack.type, baseAttack);
+    Move(BaseMove baseMove) {
+        this(baseMove.name, baseMove.power, baseMove.PP, baseMove.type, baseMove);
     }
 
     public String getName() {
@@ -27,9 +27,9 @@ public class Attack {
         return this.power;
     }
     public String getAttackFactorString(Pokemon defender) {
-        return this.baseAttack.getAttackFactorString(defender);
+        return this.baseMove.getAttackFactorString(defender);
     }
     public void cast(Pokemon attacker,Pokemon defender){
-        this.baseAttack.cast(attacker, defender);
+        this.baseMove.cast(attacker, defender);
     }
 }
