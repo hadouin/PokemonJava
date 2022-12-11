@@ -1,5 +1,6 @@
 package com.hadouin.pokemon;
 
+import com.hadouin.pokemon.core.*;
 import com.hadouin.utils.GUI;
 import com.hadouin.utils.InputParser;
 import javafx.application.Application;

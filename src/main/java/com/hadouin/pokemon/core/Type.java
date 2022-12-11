@@ -1,4 +1,4 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.core;
 
 public enum Type {
     // order is important will get factor from table with ordinate

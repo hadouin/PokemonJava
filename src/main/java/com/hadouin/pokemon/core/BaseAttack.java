@@ -1,4 +1,4 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.core;
 
 import java.util.Random;
 

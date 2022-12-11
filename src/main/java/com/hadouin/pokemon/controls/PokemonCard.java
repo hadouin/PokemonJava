@@ -1,5 +1,7 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.controls;
 
+import com.hadouin.pokemon.Main;
+import com.hadouin.pokemon.core.Pokemon;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -28,7 +30,7 @@ public class PokemonCard extends AnchorPane {
     Pokemon pokemon;
 
     public PokemonCard() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("pokemonCard.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("pokemonCard.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         try

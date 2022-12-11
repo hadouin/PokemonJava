@@ -1,6 +1,4 @@
-package com.hadouin.pokemon;
-
-import com.hadouin.pokemon.StarterPokemons;
+package com.hadouin.pokemon.core;
 
 public enum Professor {
     SORBIER("Sorbier", new Pokemon[]{StarterPokemons.Tiplouf.buildPokemon(), StarterPokemons.Ouisticram.buildPokemon(), StarterPokemons.Tortipouss.buildPokemon()}),

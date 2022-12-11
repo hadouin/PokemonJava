@@ -1,10 +1,9 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.core;
 
-import javafx.fxml.FXML;
+import com.hadouin.pokemon.Main;
+import com.hadouin.pokemon.controller.BattleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,9 +18,8 @@ public class Battle {
     }
     public void start(Stage stage) throws IOException {
         BattleController battleController = new BattleController(this.player1, this.player2);
-        FXMLLoader fxmlLoader = new FXMLLoader(Battle.class.getResource("battle-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("battle-view.fxml"));
         fxmlLoader.setController(battleController);
-
         Scene scene = new Scene(fxmlLoader.load(), 620, 700);
         stage.setTitle("Battle!");
         stage.setScene(scene);

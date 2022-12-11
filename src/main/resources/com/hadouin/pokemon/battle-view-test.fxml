@@ -17,12 +17,12 @@
       <children>
          <ImageView fitHeight="272.0" fitWidth="580.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0">
             <image>
-               <Image url="@bg.jpg" />
+               <Image url="@BattleAssets/bg.jpg" />
             </image>
          </ImageView>
          <ImageView fitHeight="232.0" fitWidth="580.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0">
             <image>
-               <Image url="@base.png" />
+               <Image url="@BattleAssets/base.png" />
             </image>
          </ImageView>
             <ImageView fx:id="playerImage" fitHeight="150.0" fitWidth="246.0" layoutX="58.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-12.0">

@@ -1,4 +1,4 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.core;
 
 public enum StarterPokemons {
     Tiplouf("Tiplouf", Type.WATER, 53, new Attack[]{BaseAttack.POUND.buildAttack(), BaseAttack.BUBBLES.buildAttack()}),
@@ -31,7 +31,7 @@ public enum StarterPokemons {
     }
 
 
-    Pokemon buildPokemon(){
+    public Pokemon buildPokemon(){
         return new Pokemon(this);
     }
 }

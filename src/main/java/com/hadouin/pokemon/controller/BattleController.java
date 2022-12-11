@@ -1,5 +1,9 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.controller;
 
+import com.hadouin.pokemon.controls.PokemonCard;
+import com.hadouin.pokemon.core.Attack;
+import com.hadouin.pokemon.core.Player;
+import com.hadouin.pokemon.core.Pokemon;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.animation.Transition;
@@ -32,7 +36,7 @@ public class BattleController {
     @FXML private Label actionLabel;
     private String moveMessage;
 
-    BattleController(Player player, Player enemy) {
+    public BattleController(Player player, Player enemy) {
         this.player = player;
         this.enemy = enemy;
         this.playerPokemon = player.getPokemons().get(0);

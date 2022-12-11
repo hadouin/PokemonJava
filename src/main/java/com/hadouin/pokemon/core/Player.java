@@ -1,4 +1,4 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ public class Player {
     private String name;
     private List<Pokemon> pokemons;
 
-    Player(String name) {
+    public Player(String name) {
         this.name = name;
         pokemons = new ArrayList<>(6);
     }

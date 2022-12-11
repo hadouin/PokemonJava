@@ -1,5 +1,6 @@
-package com.hadouin.pokemon;
+package com.hadouin.pokemon.core;
 
+import com.hadouin.pokemon.Main;
 import com.hadouin.utils.GUI;
 import com.hadouin.utils.InputParser;
 import javafx.scene.image.Image;
@@ -26,8 +27,8 @@ public class Pokemon {
         this.PV = pv;
         this.maxPV = pv;
         this.attacks = attacks;
-        this.front = new Image(this.getClass().getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
-        this.back = new Image(this.getClass().getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
+        this.front = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
+        this.back = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
     }
 
     Pokemon(StarterPokemons starter){
