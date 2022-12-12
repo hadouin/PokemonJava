@@ -11,8 +11,8 @@ enum BaseMove {
     ABSORB("Vol-Vie",20,25, Type.GRASS) {
         @Override
         public void cast(Pokemon attacker, Pokemon defender){
-            int attackDamage = (int) (this.power / 2 * getRandom());
-            int damageDealt = defender.losePV(attackDamage);
+            int damage = getDamage(attacker, defender);
+            int damageDealt = defender.losePV(damage);
             attacker.gainPV(damageDealt / 2);
         }
     },
@@ -39,7 +39,7 @@ enum BaseMove {
 
     public double getRandom(){
         Random r = new Random();
-        return r.nextDouble(0.9, 1.1);
+        return r.nextDouble(0.85, 1);
     }
 
     public double getTypeFactor(Pokemon defender){
@@ -57,8 +57,14 @@ enum BaseMove {
         return "";
     }
 
+    int getDamage(Pokemon attacker, Pokemon defender){
+        return (int) ((this.power / 2) * getRandom() * getTypeFactor(defender)) ;
+    }
+
     public void cast(Pokemon attacker, Pokemon defender) {
-        int damage = (int) ((this.power / 2) * getRandom() * getTypeFactor(defender)) ;
+        int damage = getDamage(attacker, defender);
         defender.losePV(damage);
     }
+
+
 }

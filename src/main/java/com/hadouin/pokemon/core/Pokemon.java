@@ -7,36 +7,37 @@ import javafx.scene.image.Image;
 
 public class Pokemon {
     private String name;
-    public String getName() {
-        return this.name;
-    }
-
     private Type type;
-    private int PV;
-    private int maxPV;
+
+    private short[] stats, battleStats;
     private int XP = 0;
 
     private Move[] moves;
     private Image back;
     private Image front;
+    private Species specie;
 
-    Pokemon(String name, Type type, int pv, Move[] moves){
-        this.name = name;
-        this.type = type;
-        this.PV = pv;
-        this.maxPV = pv;
-        this.moves = moves;
+    private void calculateStats() {
+        for (int i = 0; i < Stat.values().length; i++){
+            this.stats[i] = Stat.values()[i].formula(this.specie.stats[i], (byte) 15, (short) 0, this.getLVL());
+        }
+    }
+
+    Pokemon(Species starter){
+        this.specie = starter;
+        this.name = starter.name;
+        this.type = starter.type;
+        this.moves = starter.moves;
+        this.XP = 216;
+        this.stats = new short[Stat.values().length];
+        calculateStats();
+        this.battleStats = stats;
         this.front = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
         this.back = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
     }
 
-    Pokemon(StarterPokemons starter){
-        this(starter.name, starter.type, starter.PV, starter.moves);
-        this.XP = 63;
-    }
-
     public boolean isFainted() {
-        return this.PV <= 0;
+        return this.battleStats[Stat.PV.ordinal()] <= 0;
     }
 
     public void askNickname() {
@@ -47,25 +48,28 @@ public class Pokemon {
     }
 
     public int losePV(int pv) {
-        if (this.PV == 0){
+        if (this.battleStats[Stat.PV.ordinal()] == 0){
             return 0;
         }
-        this.PV -= pv;
-        if (this.PV < 0){
-            int lostPV = pv + this.PV;
-            this.PV = 0;
+        this.battleStats[Stat.PV.ordinal()] -= pv;
+        if (this.battleStats[Stat.PV.ordinal()] < 0){
+            int lostPV = pv + this.battleStats[Stat.PV.ordinal()];
+            this.battleStats[Stat.PV.ordinal()] = 0;
             return lostPV;
         }
         return pv;
     }
 
     public void gainPV(int pv) {
-        this.PV += pv;
-        if (this.PV > this.maxPV){
-            this.PV = this.maxPV;
+        this.battleStats[0] += pv;
+        if (this.battleStats[0] > this.stats[Stat.PV.ordinal()]){
+            this.battleStats[0] = this.stats[Stat.PV.ordinal()];
         }
     }
 
+    public String getName() {
+        return this.name;
+    }
     public Type getType() {
         return this.type;
     }
@@ -76,12 +80,12 @@ public class Pokemon {
         return this.back;
     }
 
-    public int getLVL(){
+    public byte getLVL(){
         int[] myXpTable = Levels.FAST.getTableXpLevel();
         // get first value that is not reached
         for (int i = 0; i<myXpTable.length; i++){
             if (myXpTable[i]> this.XP) {
-                return i - 1;
+                return (byte) (i - 1);
             }
         }
         return 100;
@@ -91,11 +95,11 @@ public class Pokemon {
     }
 
     public int getPV() {
-        return this.PV;
+        return this.battleStats[Stat.PV.ordinal()];
     }
 
     public int getMaxPV() {
-        return this.maxPV;
+        return this.stats[Stat.PV.ordinal()];
     }
 
 }
