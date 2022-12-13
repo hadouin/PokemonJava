@@ -6,8 +6,8 @@ public enum Professor {
     CHEN("Chen", new Pokemon[]{new Pokemon.Builder(Species.Bulbizarre).build(), new Pokemon.Builder(Species.Salamèche).build(), new Pokemon.Builder(Species.Carapuce).build()}),
     ;
 
-    private String name;
-    private Pokemon[] pokemons;
+    private final String name;
+    private final Pokemon[] pokemons;
 
     Professor(String nameString, Pokemon[] pokemons) {
         this.name = nameString;

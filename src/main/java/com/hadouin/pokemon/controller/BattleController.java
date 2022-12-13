@@ -7,7 +7,6 @@ import com.hadouin.pokemon.core.Move;
 import com.hadouin.pokemon.core.Player;
 import com.hadouin.pokemon.core.Pokemon;
 import javafx.animation.Animation;
-import javafx.animation.PauseTransition;
 import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

@@ -69,9 +69,7 @@ public class Battle {
         ui.setMessage(pokemon.getName() + " à toi de jouer !");
         nextPlayer();
         update();
-        doAfter(2000, () -> {
-            ui.setMessage("Que doit faire " + currentPokemon.getName() + "?");
-        });
+        doAfter(2000, () -> ui.setMessage("Que doit faire " + currentPokemon.getName() + "?"));
         ui.chooseAction();
     }
 
@@ -85,9 +83,7 @@ public class Battle {
         move.cast(attacker, defender);
         update();
         this.moveQuote = move.getAttackFactorString(defender);
-        doAfter(2000, () -> {
-            ui.setMessage(moveQuote);
-        });
+        doAfter(2000, () -> ui.setMessage(moveQuote));
 
         doAfter(3000, () ->{
             nextPlayer();
@@ -108,9 +104,7 @@ public class Battle {
     }
     private void doAfter(int millis, IVoid todo){
         PauseTransition pauseTransition = new PauseTransition((Duration.millis(millis)));
-        pauseTransition.setOnFinished(e -> {
-            todo.doit();
-        });
+        pauseTransition.setOnFinished(e -> todo.doit());
         pauseTransition.play();
     }
 }

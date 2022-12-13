@@ -13,9 +13,9 @@ public enum Species {
     Salamèche("Salamèche", Type.FIRE, new short[]{44,58,44,58,44,61}),
     Carapuce("Carapuce", Type.WATER, new short[]{44,58,44,58,44,61});
 
-    public short[] stats;
-    String name;
-    Type type;
+    public final short[] stats;
+    final String name;
+    final Type type;
     Move[] moves;
     int baseXP;
 
