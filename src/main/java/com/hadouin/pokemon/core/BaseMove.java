@@ -37,9 +37,15 @@ enum BaseMove {
         return new Move(this);
     }
 
+    public double getSTAB(Pokemon attacker){
+        if (attacker.getType() == this.type){
+            return 1.5;
+        }
+        return 1;
+    }
     public double getRandom(){
         Random r = new Random();
-        return r.nextDouble(0.85, 1);
+        return r.nextDouble(0.9, 1.1);
     }
 
     public double getTypeFactor(Pokemon defender){
@@ -58,9 +64,16 @@ enum BaseMove {
     }
 
     int getDamage(Pokemon attacker, Pokemon defender){
-        int A = attacker.getStat(Stat.ATTACK.ordinal());
-        int D = defender.getStat(Stat.DEFENSE.ordinal());
-        return (short) (((((((2 * attacker.getLVL()) / 5) + 2) * this.power * (A / D)) / 50) + 2) * getRandom() * getTypeFactor(defender));
+        double A = attacker.getStat(Stat.ATTACK.ordinal());
+        double D = defender.getStat(Stat.DEFENSE.ordinal());
+        double level = attacker.getLVL();
+        double random = getRandom();
+        double type = getTypeFactor(defender);
+        double STAB = getSTAB(attacker);
+
+        double baseCalculation = ((((((2 * level ) / 5) + 2) * this.power * (A/D)) / 50) + 2);
+        short i = (short) (baseCalculation * random * type * STAB);
+        return i;
     }
 
     public void cast(Pokemon attacker, Pokemon defender) {
