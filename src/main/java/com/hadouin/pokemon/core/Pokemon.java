@@ -17,23 +17,53 @@ public class Pokemon {
     private Image front;
     private Species specie;
 
-    private void calculateStats() {
-        for (int i = 0; i < Stat.values().length; i++){
-            this.stats[i] = Stat.values()[i].formula(this.specie.stats[i], (byte) 15, (short) 0, this.getLVL());
+    Pokemon(Builder builder){
+        specie = builder.specie;
+        name = specie.name;
+        type = specie.type;
+        moves = specie.moves;
+        XP = builder.XP;
+        this.stats = new short[Stat.values().length];
+        calculateStats(this.getLVL());
+        this.battleStats = stats.clone();
+        this.front = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
+        this.back = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
+    }
+
+    public void earnXP(int xpGain) {
+        this.XP += xpGain;
+        this.calculateStats(this.getLVL());
+    }
+
+    public int getXPtoNext(byte lvl){
+        return Levels.FAST.tableXpLevel[lvl] - Levels.FAST.tableXpLevel[lvl - 1];
+    }
+
+    private void onLevelUp(byte lvl) {
+
+    }
+
+    public static class Builder {
+        // Params obligatoires
+        private final Species specie;
+        // Params facultatifs
+        private int XP = 0; // set to lvl 1 by default;
+
+        public Builder(Species specie) {
+            this.specie = specie;
+        }
+        public Builder baseXP(int XP){
+            this.XP = XP; return this;
+        }
+        public Pokemon build(){
+            return new Pokemon(this);
         }
     }
 
-    Pokemon(Species starter){
-        this.specie = starter;
-        this.name = starter.name;
-        this.type = starter.type;
-        this.moves = starter.moves;
-        this.XP = 216;
-        this.stats = new short[Stat.values().length];
-        calculateStats();
-        this.battleStats = stats;
-        this.front = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
-        this.back = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
+    private void calculateStats(byte lvl) {
+        for (int i = 0; i < Stat.values().length; i++){
+            this.stats[i] = Stat.values()[i].formula(this.specie.stats[i], (byte) 15, (short) 0, lvl);
+        }
     }
 
     public boolean isFainted() {
@@ -79,16 +109,22 @@ public class Pokemon {
     public Image getImageBack(){
         return this.back;
     }
+    public void setXP(int XP){
+        this.XP = XP;
+    }
 
     public byte getLVL(){
+        if (this.XP == 0){
+            return 1;
+        }
         int[] myXpTable = Levels.FAST.getTableXpLevel();
         // get first value that is not reached
-        for (int i = 0; i<myXpTable.length; i++){
-            if (myXpTable[i]> this.XP) {
+        for (int i = 0; i < myXpTable.length; i++){
+            if (myXpTable[i] > this.XP) {
                 return (byte) (i - 1);
             }
         }
-        return 100;
+        return 1;
     }
     public Move[] getAttacks() {
         return this.moves;
@@ -102,4 +138,11 @@ public class Pokemon {
         return this.stats[Stat.PV.ordinal()];
     }
 
+    public short getStat(int ordinal) {
+        return this.battleStats[ordinal];
+    }
+
+    public int getXPGain(){
+        return (this.specie.baseXP * this.getLVL()) / 7;
+    }
 }

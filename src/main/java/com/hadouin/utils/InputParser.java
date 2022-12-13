@@ -7,6 +7,5 @@ public interface InputParser {
     public abstract boolean promptBoolean(String message);
     public abstract int chooseStringIndex(String message, String[] choices);
     public abstract void println(String string);
-
     public abstract void print(String string);
 }

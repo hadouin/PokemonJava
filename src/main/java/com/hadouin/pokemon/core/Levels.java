@@ -11,7 +11,7 @@ public enum Levels {
     };
     abstract int xpNeeded(int level);
 
-    private final int[] tableXpLevel = new int[100];
+    public final int[] tableXpLevel = new int[100];
 
     Levels() {
         for (int i = 0; i<100; i++){

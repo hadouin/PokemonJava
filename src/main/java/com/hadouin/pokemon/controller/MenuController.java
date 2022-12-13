@@ -2,6 +2,7 @@ package com.hadouin.pokemon.controller;
 
 import com.hadouin.pokemon.core.Battle;
 import com.hadouin.pokemon.core.Player;
+import com.hadouin.pokemon.core.Pokemon;
 import com.hadouin.pokemon.core.Species;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,18 +18,20 @@ public class MenuController {
     @FXML
     protected void onBattlePressed(ActionEvent ae) throws IOException {
         Player player1 = new Player("Hadouin");
-        player1.addPokemon(Species.Ouisticram.buildPokemon());
-        player1.addPokemon(Species.Tortipouss.buildPokemon());
-        player1.addPokemon(Species.Tiplouf.buildPokemon());
+        player1.addPokemon(new Pokemon.Builder(Species.Ouisticram).baseXP(8).build());
+        player1.addPokemon(new Pokemon.Builder(Species.Tortipouss).build());
+        player1.addPokemon(new Pokemon.Builder(Species.Tiplouf).build());
         Player player2 = new Player("Sacha");
-        player2.addPokemon(Species.Tortipouss.buildPokemon());
-        player2.addPokemon(Species.Tiplouf.buildPokemon());
-        player2.addPokemon(Species.Ouisticram.buildPokemon());
+        player2.addPokemon(new Pokemon.Builder(Species.Tortipouss).baseXP(7).build());
+        player2.addPokemon(new Pokemon.Builder(Species.Tiplouf).build());
+        player2.addPokemon(new Pokemon.Builder(Species.Ouisticram).build());
         Battle battle = new Battle(player1, player2);
         Node source = (Node) ae.getSource();
         Stage theStage = (Stage) source.getScene().getWindow();
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+
         battle.start(theStage);
+
         theStage.setX((primScreenBounds.getWidth() - theStage.getWidth()) / 2);
         theStage.setY((primScreenBounds.getHeight() - theStage.getHeight()) / 2);
     }

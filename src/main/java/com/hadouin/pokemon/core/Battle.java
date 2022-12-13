@@ -26,4 +26,6 @@ public class Battle {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }

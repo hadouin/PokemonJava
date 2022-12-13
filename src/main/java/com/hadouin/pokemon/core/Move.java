@@ -31,5 +31,8 @@ public class Move {
     }
     public void cast(Pokemon attacker,Pokemon defender){
         this.baseMove.cast(attacker, defender);
+        if (defender.isFainted()){
+            attacker.earnXP(defender.getXPGain());
+        }
     }
 }

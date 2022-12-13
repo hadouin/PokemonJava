@@ -58,7 +58,9 @@ enum BaseMove {
     }
 
     int getDamage(Pokemon attacker, Pokemon defender){
-        return (int) ((this.power / 2) * getRandom() * getTypeFactor(defender)) ;
+        int A = attacker.getStat(Stat.ATTACK.ordinal());
+        int D = defender.getStat(Stat.DEFENSE.ordinal());
+        return (short) (((((((2 * attacker.getLVL()) / 5) + 2) * this.power * (A / D)) / 50) + 2) * getRandom() * getTypeFactor(defender));
     }
 
     public void cast(Pokemon attacker, Pokemon defender) {

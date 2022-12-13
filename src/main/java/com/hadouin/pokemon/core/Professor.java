@@ -1,9 +1,9 @@
 package com.hadouin.pokemon.core;
 
 public enum Professor {
-    SORBIER("Sorbier", new Pokemon[]{Species.Tiplouf.buildPokemon(), Species.Ouisticram.buildPokemon(), Species.Tortipouss.buildPokemon()}),
-    SEKO("Seko", new Pokemon[]{Species.Arcko.buildPokemon(), Species.Poussifeu.buildPokemon(), Species.Gobou.buildPokemon()}),
-    CHEN("Chen", new Pokemon[]{Species.Bulbizarre.buildPokemon(), Species.Salamèche.buildPokemon(), Species.Carapuce.buildPokemon()}),
+    SORBIER("Sorbier", new Pokemon[]{new Pokemon.Builder(Species.Tiplouf).build(), new Pokemon.Builder(Species.Ouisticram).build(), new Pokemon.Builder(Species.Tortipouss).build()}),
+    SEKO("Seko", new Pokemon[]{new Pokemon.Builder(Species.Arcko).build(), new Pokemon.Builder(Species.Poussifeu).build(), new Pokemon.Builder(Species.Gobou).build()}),
+    CHEN("Chen", new Pokemon[]{new Pokemon.Builder(Species.Bulbizarre).build(), new Pokemon.Builder(Species.Salamèche).build(), new Pokemon.Builder(Species.Carapuce).build()}),
     ;
 
     private String name;

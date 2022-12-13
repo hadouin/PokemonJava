@@ -1,5 +1,6 @@
 package com.hadouin.pokemon.controller;
 
+import com.hadouin.pokemon.PokemonBattleUI;
 import com.hadouin.pokemon.controls.PokemonCard;
 import com.hadouin.pokemon.core.Move;
 import com.hadouin.pokemon.core.Player;
@@ -14,7 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
-public class BattleController {
+public class BattleController implements PokemonBattleUI {
 
     private final double MAX_VALUE = 1.7976931348623157E308;
     Player player;
@@ -45,9 +46,24 @@ public class BattleController {
         currentPokemon = this.playerPokemon;
     }
 
+    public void displayPlayerPokemon(Pokemon playerPokemon) {
+        playerCard.setPokemon(playerPokemon);
+        playerImage.setImage(playerPokemon.getImageBack());
+    }
+
+    public void displayEnemyPokemon(Pokemon enemyPokemon) {
+        enemyCard.setPokemon(enemyPokemon);
+        enemyImage.setImage(enemyPokemon.getImageFront());
+    }
+
+    public void displayPokemons(Pokemon playerPokemon, Pokemon enemyPokemon) {
+        displayPlayerPokemon(playerPokemon);
+        displayEnemyPokemon(enemyPokemon);
+    }
+
     public void initialize() {
         update();
-        setMessage("C'est au tour de " + currentPlayer.getName());
+        setMessage("C'est au tour de \n" + currentPlayer.getName());
         chooseAction();
     }
 
@@ -129,7 +145,7 @@ public class BattleController {
         void doit();
     }
 
-    private void setMessage(String string) {
+    public void setMessage(String string) {
         final Animation animation = new Transition() {
             {
                 setCycleDuration(Duration.millis(1000));
@@ -143,20 +159,59 @@ public class BattleController {
         animation.play();
     }
 
-    private void clearMessage(){
-        labelMessage.setText("");
-    }
+    @Override
+    public void chooseMove(Pokemon pokemon) {
+        clearChoices();
+        int x = 0;
+        int y = 0;
+        for ( Move move : pokemon.getAttacks()) {
 
+            Button button = new Button(move.getName());
+            button.setMaxWidth(MAX_VALUE);
+            button.setMaxHeight(MAX_VALUE);
+            button.setOnAction(e -> {
+                doAttack(move);
+            });
+            this.choicesGrid.add(button, x, y);
+
+            x++;
+            if (x > 1){
+                y++;
+                x=0;
+            }
+        }
+    }
+    @Override
+    public void choosePokemon(Player player) {
+        clearChoices();
+        int x = 0;
+        int y = 0;
+        for (Pokemon pokemon : player.getPokemons()) {
+            Button button = new Button(pokemon.getName() + " " + pokemon.getPV() +"/"+ pokemon.getMaxPV());
+            button.setMaxWidth(MAX_VALUE);
+            button.setMaxHeight(MAX_VALUE);
+            if (!pokemon.isFainted()) {
+                button.setOnAction(e -> {
+                    changePokemon(pokemon);
+                });
+            }
+            this.choicesGrid.add(button, x,y);
+            x++;
+            if (x > 1) {
+                y++;
+                x=0;
+            }
+        }
+    }
+    private void clearChoices(){
+        this.choicesGrid.getChildren().clear();
+    }
     private void doAfter(IVoid todo, int millis){
         PauseTransition pauseTransition = new PauseTransition((Duration.millis(millis)));
         pauseTransition.setOnFinished(e -> {
             todo.doit();
         });
         pauseTransition.play();
-    }
-
-    private void clearChoices(){
-        this.choicesGrid.getChildren().clear();
     }
 
     private void choosePokemon() {
