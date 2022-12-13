@@ -17,10 +17,10 @@ enum BaseMove {
         }
     },
     ;
-    String name;
-    int power;
-    int PP;
-    Type type;
+    final String name;
+    final int power;
+    final int PP;
+    final Type type;
     BaseMove(String name, int power, int pp) {
         this.name = name;
         this.power = power;
@@ -72,8 +72,7 @@ enum BaseMove {
         double STAB = getSTAB(attacker);
 
         double baseCalculation = ((((((2 * level ) / 5) + 2) * this.power * (A/D)) / 50) + 2);
-        short i = (short) (baseCalculation * random * type * STAB);
-        return i;
+        return (short) (baseCalculation * random * type * STAB);
     }
 
     public void cast(Pokemon attacker, Pokemon defender) {
