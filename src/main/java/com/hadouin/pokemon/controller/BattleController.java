@@ -2,6 +2,7 @@ package com.hadouin.pokemon.controller;
 
 import com.hadouin.pokemon.PokemonBattleUI;
 import com.hadouin.pokemon.controls.PokemonCard;
+import com.hadouin.pokemon.core.Battle;
 import com.hadouin.pokemon.core.Move;
 import com.hadouin.pokemon.core.Player;
 import com.hadouin.pokemon.core.Pokemon;
@@ -16,135 +17,58 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 
 public class BattleController implements PokemonBattleUI {
-
     private final double MAX_VALUE = 1.7976931348623157E308;
-    Player player;
-    Pokemon playerPokemon;
-    Player enemy;
-    Pokemon enemyPokemon;
-    Player currentPlayer;
-    Pokemon currentPokemon;
-
     @FXML private GridPane choicesGrid;
-
     @FXML private PokemonCard playerCard;
     @FXML private ImageView playerImage;
-
     @FXML private PokemonCard enemyCard;
     @FXML private ImageView enemyImage;
-
     @FXML private Label labelMessage;
-    @FXML private Label actionLabel;
-    private String moveMessage;
 
-    public BattleController(Player player, Player enemy) {
-        this.player = player;
-        this.enemy = enemy;
-        this.playerPokemon = player.getPokemons().get(0);
-        this.enemyPokemon = enemy.getPokemons().get(0);
-        currentPlayer = this.player;
-        currentPokemon = this.playerPokemon;
+    Battle battle;
+
+    public BattleController(Battle battle) {
+        this.battle = battle;
     }
 
+    @Override
     public void displayPlayerPokemon(Pokemon playerPokemon) {
         playerCard.setPokemon(playerPokemon);
         playerImage.setImage(playerPokemon.getImageBack());
     }
 
+    @Override
     public void displayEnemyPokemon(Pokemon enemyPokemon) {
         enemyCard.setPokemon(enemyPokemon);
         enemyImage.setImage(enemyPokemon.getImageFront());
     }
 
+    @Override
     public void displayPokemons(Pokemon playerPokemon, Pokemon enemyPokemon) {
         displayPlayerPokemon(playerPokemon);
         displayEnemyPokemon(enemyPokemon);
     }
 
-    public void initialize() {
-        update();
-        setMessage("C'est au tour de \n" + currentPlayer.getName());
-        chooseAction();
-    }
-
-    private void update() {
-        playerCard.setPokemon(playerPokemon);
-        enemyCard.setPokemon(enemyPokemon);
-        playerImage.setImage(playerPokemon.getImageBack());
-        enemyImage.setImage(enemyPokemon.getImageFront());
-        actionLabel.setText(currentPlayer.getName());
-    }
-
-    private void chooseAction() {
+    @Override
+    public void chooseAction() {
         this.choicesGrid.getChildren().clear();
         Button attackButton = new Button("Attack");
         attackButton.setMaxHeight(MAX_VALUE);
         attackButton.setMaxWidth(MAX_VALUE);
         attackButton.setOnAction(e -> {
-            chooseAttack();
+            chooseMove(battle.currentPokemon);
         });
         Button changeButton = new Button("Changer de Pokemon");
         changeButton.setMaxHeight(MAX_VALUE);
         changeButton.setMaxWidth(MAX_VALUE);
         changeButton.setOnAction(e -> {
-            choosePokemon();
+            choosePokemon(battle.currentPlayer);
         });
         this.choicesGrid.add(attackButton, 0,0);
         this.choicesGrid.add(changeButton,1 ,0);
     }
 
-    private void chooseAttack() {
-        clearChoices();
-        int x = 0;
-        int y = 0;
-        for ( Move move : currentPokemon.getAttacks()) {
-
-            Button button = new Button(move.getName());
-            button.setMaxWidth(MAX_VALUE);
-            button.setMaxHeight(MAX_VALUE);
-            button.setOnAction(e -> {
-                doAttack(move);
-            });
-            this.choicesGrid.add(button, x, y);
-
-            x++;
-            if (x > 1){
-                y++;
-                x=0;
-            }
-        }
-    }
-
-    private void doAttack(Move move) {
-        Pokemon attacker;
-        Pokemon defender;
-        attacker = currentPokemon;
-        defender = (currentPokemon == playerPokemon) ? enemyPokemon : playerPokemon;
-        clearChoices();
-        setMessage(attacker.getName() + " utilise " + move.getName());
-        move.cast(attacker, defender);
-        update();
-        this.moveMessage = move.getAttackFactorString(defender);
-        doAfter(this::afterAttack, 3000);
-    }
-
-    private void afterAttack() {
-        Pokemon defender = (currentPokemon == playerPokemon) ? enemyPokemon : playerPokemon;
-        if (defender.getPV() == 0) {
-            nextPlayer();
-            clearChoices();
-            setMessage(defender.getName() + " est K.O. Choisir un nouveau pokemon: ");
-            doAfter(this::choosePokemon, 3000);
-        } else {
-            setMessage(moveMessage);
-            doAfter(this::nextPlayer, 3000);
-        }
-    }
-
-    private interface IVoid {
-        void doit();
-    }
-
+    @Override
     public void setMessage(String string) {
         final Animation animation = new Transition() {
             {
@@ -170,7 +94,7 @@ public class BattleController implements PokemonBattleUI {
             button.setMaxWidth(MAX_VALUE);
             button.setMaxHeight(MAX_VALUE);
             button.setOnAction(e -> {
-                doAttack(move);
+                battle.resolveMove(move);
             });
             this.choicesGrid.add(button, x, y);
 
@@ -181,6 +105,7 @@ public class BattleController implements PokemonBattleUI {
             }
         }
     }
+
     @Override
     public void choosePokemon(Player player) {
         clearChoices();
@@ -192,7 +117,7 @@ public class BattleController implements PokemonBattleUI {
             button.setMaxHeight(MAX_VALUE);
             if (!pokemon.isFainted()) {
                 button.setOnAction(e -> {
-                    changePokemon(pokemon);
+                    battle.changePokemon(pokemon);
                 });
             }
             this.choicesGrid.add(button, x,y);
@@ -203,64 +128,11 @@ public class BattleController implements PokemonBattleUI {
             }
         }
     }
-    private void clearChoices(){
+
+    @Override
+    public void clearChoices(){
         this.choicesGrid.getChildren().clear();
     }
-    private void doAfter(IVoid todo, int millis){
-        PauseTransition pauseTransition = new PauseTransition((Duration.millis(millis)));
-        pauseTransition.setOnFinished(e -> {
-            todo.doit();
-        });
-        pauseTransition.play();
-    }
 
-    private void choosePokemon() {
-        clearChoices();
-        int x = 0;
-        int y = 0;
-        for (Pokemon pokemon : currentPlayer.getPokemons()) {
-            Button button = new Button(pokemon.getName() + " " + pokemon.getPV() +"/"+ pokemon.getMaxPV());
-            button.setMaxWidth(MAX_VALUE);
-            button.setMaxHeight(MAX_VALUE);
-            if (!pokemon.isFainted()) {
-                button.setOnAction(e -> {
-                    changePokemon(pokemon);
-                });
-            }
-            this.choicesGrid.add(button, x,y);
-            x++;
-            if (x > 1) {
-                y++;
-                x=0;
-            }
-        }
-    }
 
-    private void changePokemon(Pokemon pokemon) {
-        if (this.currentPlayer == player){
-            playerPokemon = pokemon;
-            update();
-            clearChoices();
-            setMessage(playerPokemon.getName() + " à toi de jouer !");
-        }
-        if (this.currentPlayer == enemy){
-            enemyPokemon = pokemon;
-            update();
-            clearChoices();
-            setMessage(enemyPokemon.getName() + " à toi de jouer !");
-        }
-        doAfter(this::nextPlayer, 3000);
-    }
-
-    private void nextPlayer(){
-        if (currentPlayer == player) {
-            currentPlayer = enemy;
-            currentPokemon = enemyPokemon;
-        } else {
-            currentPlayer = player;
-            currentPokemon = playerPokemon;
-        }
-        update();
-        chooseAction();
-    }
 }

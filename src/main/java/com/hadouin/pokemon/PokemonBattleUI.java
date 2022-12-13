@@ -10,4 +10,6 @@ public interface PokemonBattleUI {
     void setMessage(String string);
     void chooseMove(Pokemon pokemon);
     void choosePokemon(Player player);
+    void chooseAction();
+    void clearChoices();
 }
