@@ -6,7 +6,7 @@ public enum Species {
     Tortipouss("Tortipouss", Type.GRASS, new short[]{55, 68, 64, 45, 55, 31}, 64, new Move[]{BaseMove.TACKLE.buildAttack(), BaseMove.ABSORB.buildAttack()}),
 
     Arcko("Arcko", Type.GRASS, new short[]{44,58,44,58,44,61}),
-    Poussifeu("Poussifeu", Type.FIRE, new short[]{44,58,44,58,44,61} ),
+    Poussifeu("Poussifeu", Type.FIRE, new short[]{44,58,44,58,44,61}),
     Gobou("Gobou", Type.WATER, new short[]{44,58,44,58,44,61}),
 
     Bulbizarre("Bulbizarre", Type.GRASS, new short[]{44,58,44,58,44,61}),

@@ -66,7 +66,7 @@ enum BaseMove {
     int getDamage(Pokemon attacker, Pokemon defender){
         double A = attacker.getStat(Stat.ATTACK.ordinal());
         double D = defender.getStat(Stat.DEFENSE.ordinal());
-        double level = attacker.getLVL();
+        double level = attacker.calcLVL();
         double random = getRandom();
         double type = getTypeFactor(defender);
         double STAB = getSTAB(attacker);

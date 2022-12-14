@@ -24,6 +24,7 @@ public class PokemonCard extends AnchorPane {
     private static final String[] barColorStyleClasses = {RED_BAR, ORANGE_BAR, YELLOW_BAR, GREEN_BAR};
 
     @FXML ProgressBar lifebar;
+    @FXML ProgressBar XPBar;
     @FXML Label name;
     @FXML Label lvl;
     @FXML Label PV;
@@ -43,42 +44,79 @@ public class PokemonCard extends AnchorPane {
         }
     }
     public void initialize() {
+        // Set color on lifebar change
         lifebar.progressProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                double progress = newValue == null ? 0 : newValue.doubleValue();
-                if (progress < 0.2) {
-                    setBarStyleClass(lifebar, RED_BAR);
-                } else if (progress < 0.4) {
-                    setBarStyleClass(lifebar, ORANGE_BAR);
-                } else if (progress < 0.6) {
-                    setBarStyleClass(lifebar, YELLOW_BAR);
-                } else {
-                    setBarStyleClass(lifebar, GREEN_BAR);
-                }
-            }
-
-            private void setBarStyleClass(ProgressBar bar, String barStyleClass) {
-                bar.getStyleClass().removeAll(barColorStyleClasses);
-                bar.getStyleClass().add(barStyleClass);
+                colorLifeBar(newValue);
             }
         });
+    }
+
+    private void setBarStyleClass(ProgressBar bar, String barStyleClass) {
+        bar.getStyleClass().removeAll(barColorStyleClasses);
+        bar.getStyleClass().add(barStyleClass);
+    }
+    private void colorLifeBar(Number newValue) {
+        double progress = newValue == null ? 0 : newValue.doubleValue();
+        if (progress < 0.2) {
+            setBarStyleClass(lifebar, RED_BAR);
+        } else if (progress < 0.4) {
+            setBarStyleClass(lifebar, ORANGE_BAR);
+        } else if (progress < 0.6) {
+            setBarStyleClass(lifebar, YELLOW_BAR);
+        } else {
+            setBarStyleClass(lifebar, GREEN_BAR);
+        }
     }
 
     public void updatePV() {
         double progressValue = (double) pokemon.getPV() / pokemon.getMaxPV();
         final Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(0),    new KeyValue(lifebar.progressProperty(), lifebar.progressProperty().getValue())),
-                new KeyFrame(Duration.millis(1200), new KeyValue(lifebar.progressProperty(), progressValue))
+                new KeyFrame(Duration.millis(1000), new KeyValue(lifebar.progressProperty(), progressValue))
+        );
+        timeline.play();
+    }
+    public void updateXP() {
+        double progressValue = getProgressValue();
+        final Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(0),    new KeyValue(XPBar.progressProperty(), XPBar.progressProperty().getValue())),
+                new KeyFrame(Duration.millis(1000), new KeyValue(XPBar.progressProperty(), progressValue))
         );
         timeline.play();
     }
 
-    public void setPokemon(Pokemon pokemon) {
+    public void setXP(){
+        double progressValue = getProgressValue();
+        XPBar.progressProperty().setValue(progressValue);
+    }
+    public void setPV(){
+        double progressValue = (double) pokemon.getPV() / pokemon.getMaxPV();
+        lifebar.progressProperty().setValue(progressValue);
+        colorLifeBar(progressValue);
+    }
+    public void setPokemon(Pokemon pokemon){
         this.pokemon =  pokemon;
         this.name.setText(pokemon.getName().toUpperCase());
-        this.lvl.setText("lv." + pokemon.getLVL());
+        this.lvl.setText("lv." + pokemon.calcLVL());
         this.PV.setText(pokemon.getPV() + "/" + pokemon.getMaxPV());
+        setPV();
+        setXP();
+    }
+
+    private double getProgressValue() {
+        double xpProgress = pokemon.getXPProgress();
+        double xpToNext = pokemon.getXPtoNext();
+        return (double) xpProgress / xpToNext;
+    }
+
+    public void updatePokemon(Pokemon pokemon) {
+        this.pokemon =  pokemon;
+        this.name.setText(pokemon.getName().toUpperCase());
+        this.lvl.setText("lv." + pokemon.calcLVL());
+        this.PV.setText(pokemon.getPV() + "/" + pokemon.getMaxPV());
+        updateXP();
         updatePV();
     }
 }

@@ -40,7 +40,7 @@ public class Battle {
         stage.setTitle("Battle!");
         stage.setScene(scene);
         stage.show();
-        ui.displayPokemons(playerPokemon, enemyPokemon);
+        ui.setPokemons(playerPokemon, enemyPokemon);
         ui.chooseAction();
     }
 
@@ -55,7 +55,7 @@ public class Battle {
     }
 
     private void update(){
-        ui.displayPokemons(playerPokemon, enemyPokemon);
+        ui.updatePokemons(playerPokemon, enemyPokemon);
         currentPokemon = (currentPlayer == player) ? playerPokemon : enemyPokemon;
     }
 
@@ -88,6 +88,7 @@ public class Battle {
         doAfter(3000, () ->{
             nextPlayer();
             if (defender.isFainted()) {
+                update();
                 ui.clearChoices();
                 ui.setMessage(defender.getName() + " est K.O. Choisir un nouveau pokemon: ");
                 ui.choosePokemon(currentPlayer);

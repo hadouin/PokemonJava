@@ -31,21 +31,21 @@ public class BattleController implements PokemonBattleUI {
     }
 
     @Override
-    public void displayPlayerPokemon(Pokemon playerPokemon) {
-        playerCard.setPokemon(playerPokemon);
+    public void updatePlayerPokemon(Pokemon playerPokemon) {
+        playerCard.updatePokemon(playerPokemon);
         playerImage.setImage(playerPokemon.getImageBack());
     }
 
     @Override
-    public void displayEnemyPokemon(Pokemon enemyPokemon) {
-        enemyCard.setPokemon(enemyPokemon);
+    public void updateEnemyPokemon(Pokemon enemyPokemon) {
+        enemyCard.updatePokemon(enemyPokemon);
         enemyImage.setImage(enemyPokemon.getImageFront());
     }
 
     @Override
-    public void displayPokemons(Pokemon playerPokemon, Pokemon enemyPokemon) {
-        displayPlayerPokemon(playerPokemon);
-        displayEnemyPokemon(enemyPokemon);
+    public void updatePokemons(Pokemon playerPokemon, Pokemon enemyPokemon) {
+        updatePlayerPokemon(playerPokemon);
+        updateEnemyPokemon(enemyPokemon);
     }
 
     @Override
@@ -131,6 +131,24 @@ public class BattleController implements PokemonBattleUI {
     @Override
     public void clearChoices(){
         this.choicesGrid.getChildren().clear();
+    }
+
+    @Override
+    public void setEnemyPokemon(Pokemon enemyPokemon) {
+        enemyCard.setPokemon(enemyPokemon);
+        enemyImage.setImage(enemyPokemon.getImageFront());
+    }
+
+    @Override
+    public void setPlayerPokemon(Pokemon playerPokemon) {
+        playerCard.setPokemon(playerPokemon);
+        playerImage.setImage(playerPokemon.getImageBack());
+    }
+
+    @Override
+    public void setPokemons(Pokemon playerPokemon, Pokemon enemyPokemon) {
+        setPlayerPokemon(playerPokemon);
+        setEnemyPokemon(enemyPokemon);
     }
 
 

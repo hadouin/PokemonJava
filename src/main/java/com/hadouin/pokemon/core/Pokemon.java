@@ -11,6 +11,7 @@ public class Pokemon {
 
     private short[] stats, battleStats;
     private int XP = 0;
+    private short LVL;
 
     private Move[] moves;
     private Image back;
@@ -23,8 +24,9 @@ public class Pokemon {
         type = specie.type;
         moves = specie.moves;
         XP = builder.XP;
+        this.LVL = this.calcLVL();
         this.stats = new short[Stat.values().length];
-        calculateStats(this.getLVL());
+        calculateStats(this.calcLVL());
         this.battleStats = stats.clone();
         this.front = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/front.png"));
         this.back = new Image(Main.class.getResourceAsStream("PokemonSprites/"+this.name+"/back.png"));
@@ -32,15 +34,26 @@ public class Pokemon {
 
     public void earnXP(int xpGain) {
         this.XP += xpGain;
-        this.calculateStats(this.getLVL());
+        this.calculateStats(this.calcLVL());
     }
 
-    public int getXPtoNext(byte lvl){
-        return Levels.FAST.tableXpLevel[lvl] - Levels.FAST.tableXpLevel[lvl - 1];
+    public int getXPtoNext(){
+        byte lvl = this.calcLVL();
+        return Levels.FAST.tableXpLevel[lvl + 1] - Levels.FAST.tableXpLevel[lvl];
+    }
+    public int getXPforLevel(byte lvl){
+        return Levels.FAST.tableXpLevel[lvl];
+    }
+    public int getXPProgress(){
+        return this.XP - this.getXPforLevel(this.calcLVL());
     }
 
     private void onLevelUp(byte lvl) {
 
+    }
+
+    public int getLVL() {
+        return this.XP;
     }
 
     public static class Builder {
@@ -113,7 +126,7 @@ public class Pokemon {
         this.XP = XP;
     }
 
-    public byte getLVL(){
+    public byte calcLVL(){
         if (this.XP == 0){
             return 1;
         }
@@ -143,6 +156,6 @@ public class Pokemon {
     }
 
     public int getXPGain(){
-        return (this.specie.baseXP * this.getLVL()) / 7;
+        return (this.specie.baseXP * this.calcLVL()) / 7;
     }
 }

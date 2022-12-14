@@ -18,11 +18,11 @@ public class MenuController {
     @FXML
     protected void onBattlePressed(ActionEvent ae) throws IOException {
         Player player1 = new Player("Hadouin");
-        player1.addPokemon(new Pokemon.Builder(Species.Ouisticram).baseXP(125).build());
+        player1.addPokemon(new Pokemon.Builder(Species.Ouisticram).baseXP(150).build());
         player1.addPokemon(new Pokemon.Builder(Species.Tortipouss).baseXP(125).build());
         player1.addPokemon(new Pokemon.Builder(Species.Tiplouf).baseXP(125).build());
         Player player2 = new Player("Sacha");
-        player2.addPokemon(new Pokemon.Builder(Species.Tiplouf).baseXP(125).build());
+        player2.addPokemon(new Pokemon.Builder(Species.Tiplouf).baseXP(215).build());
         player2.addPokemon(new Pokemon.Builder(Species.Tortipouss).baseXP(125).build());
         player2.addPokemon(new Pokemon.Builder(Species.Ouisticram).baseXP(125).build());
         Battle battle = new Battle(player1, player2);
