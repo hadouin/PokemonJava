@@ -5,12 +5,14 @@ public enum Type {
     NORMAL,
     FIRE,
     GRASS,
-    WATER;
+    WATER,
+    STEEL;
 
     public static final double[][] typeFactor = {
-            {1, 1, 1, 1},
-            {1, 0.5, 2, 0.5},
-            {1, 0.5, 0.5, 2},
-            {1, 2, 0.5, 0.5},
+            {1, 1, 1, 1, 0.5},
+            {1, 0.5, 2, 0.5, 2},
+            {1, 0.5, 0.5, 2, 0.5},
+            {1, 2, 0.5, 0.5, 1},
+            {1, 0.5, 1, 0.5, 0.5}
     };
 }

@@ -62,13 +62,14 @@ public class Battle {
     public void changePokemon(Pokemon pokemon) {
         if (this.currentPlayer == player){
             playerPokemon = pokemon;
+            ui.setPlayerPokemon(playerPokemon);
         }
         if (this.currentPlayer == enemy){
             enemyPokemon = pokemon;
+            ui.setPlayerPokemon(enemyPokemon);
         }
         ui.setMessage(pokemon.getName() + " à toi de jouer !");
         nextPlayer();
-        update();
         doAfter(2000, () -> ui.setMessage("Que doit faire " + currentPokemon.getName() + "?"));
         ui.chooseAction();
     }

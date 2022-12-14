@@ -16,7 +16,8 @@ enum BaseMove {
             attacker.gainPV(damageDealt / 2);
         }
     },
-    ;
+    METAL_CLAW("Griffe acier", 50 , 35, Type.STEEL );
+
     final String name;
     final int power;
     final int PP;
