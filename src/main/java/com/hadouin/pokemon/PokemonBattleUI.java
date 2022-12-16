@@ -1,5 +1,6 @@
 package com.hadouin.pokemon;
 
+import com.hadouin.pokemon.core.Move;
 import com.hadouin.pokemon.core.Player;
 import com.hadouin.pokemon.core.Pokemon;
 
@@ -15,4 +16,6 @@ public interface PokemonBattleUI {
     void setEnemyPokemon(Pokemon enemyPokemon);
     void setPlayerPokemon(Pokemon playerPokemon);
     void setPokemons(Pokemon playerPokemon, Pokemon enemyPokemon);
+
+    void moveAnimation(Pokemon attacker, Pokemon defender, Move move);
 }

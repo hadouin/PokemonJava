@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class Battle {
     Player player;
-    Pokemon playerPokemon;
+    public Pokemon playerPokemon;
     Player enemy;
     Pokemon enemyPokemon;
     public Player currentPlayer;
@@ -66,7 +66,7 @@ public class Battle {
         }
         if (this.currentPlayer == enemy){
             enemyPokemon = pokemon;
-            ui.setPlayerPokemon(enemyPokemon);
+            ui.setEnemyPokemon(enemyPokemon);
         }
         ui.setMessage(pokemon.getName() + " à toi de jouer !");
         nextPlayer();
@@ -82,14 +82,13 @@ public class Battle {
         ui.clearChoices();
         ui.setMessage(attacker.getName() + " utilise " + move.getName());
         move.cast(attacker, defender);
-        update();
         this.moveQuote = move.getAttackFactorString(defender);
+        ui.moveAnimation(attacker, defender, move);
+        doAfter(500, this::update);
         doAfter(2000, () -> ui.setMessage(moveQuote));
-
         doAfter(3000, () ->{
             nextPlayer();
             if (defender.isFainted()) {
-                update();
                 ui.clearChoices();
                 ui.setMessage(defender.getName() + " est K.O. Choisir un nouveau pokemon: ");
                 ui.choosePokemon(currentPlayer);
@@ -97,7 +96,6 @@ public class Battle {
                 ui.chooseAction();
             }
         });
-        update();
     }
 
     // small functions not in interface
@@ -108,5 +106,8 @@ public class Battle {
         PauseTransition pauseTransition = new PauseTransition((Duration.millis(millis)));
         pauseTransition.setOnFinished(e -> todo.doit());
         pauseTransition.play();
+    }
+    public Pokemon getDefender(){
+        return (currentPokemon == playerPokemon) ? enemyPokemon : playerPokemon;
     }
 }

@@ -2,12 +2,8 @@ package com.hadouin.pokemon.controller;
 
 import com.hadouin.pokemon.PokemonBattleUI;
 import com.hadouin.pokemon.controls.PokemonCard;
-import com.hadouin.pokemon.core.Battle;
-import com.hadouin.pokemon.core.Move;
-import com.hadouin.pokemon.core.Player;
-import com.hadouin.pokemon.core.Pokemon;
-import javafx.animation.Animation;
-import javafx.animation.Transition;
+import com.hadouin.pokemon.core.*;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,9 +15,9 @@ public class BattleController implements PokemonBattleUI {
     private final double MAX_VALUE = 1.7976931348623157E308;
     @FXML private GridPane choicesGrid;
     @FXML private PokemonCard playerCard;
-    @FXML private ImageView playerImage;
+    @FXML public ImageView playerImage;
     @FXML private PokemonCard enemyCard;
-    @FXML private ImageView enemyImage;
+    @FXML public ImageView enemyImage;
     @FXML private Label labelMessage;
 
     Battle battle;
@@ -88,13 +84,15 @@ public class BattleController implements PokemonBattleUI {
         int x = 0;
         int y = 0;
         for ( Move move : pokemon.getAttacks()) {
-
-            Button button = new Button(move.getName());
+            Button button = new Button();
+            if (! (move == null)){
+                button.setText(move.getName());
+                button.setOnAction(e -> {
+                    battle.resolveMove(move);
+                });
+            }
             button.setMaxWidth(MAX_VALUE);
             button.setMaxHeight(MAX_VALUE);
-            button.setOnAction(e -> {
-                battle.resolveMove(move);
-            });
             this.choicesGrid.add(button, x, y);
 
             x++;
@@ -151,5 +149,26 @@ public class BattleController implements PokemonBattleUI {
         setEnemyPokemon(enemyPokemon);
     }
 
+    @Override
+    public void moveAnimation(Pokemon attacker, Pokemon defender, Move move) {
+        boolean isPlayerAttacker = battle.currentPokemon == battle.playerPokemon;
+        ImageView attackerImage = (isPlayerAttacker)? playerImage : enemyImage;
+        ImageView defenderImage = (isPlayerAttacker)? enemyImage : playerImage;
 
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(2);
+        timeline.setAutoReverse(true);
+        KeyValue kv = new KeyValue(attackerImage.xProperty(), isPlayerAttacker ? 10 : -10);
+        KeyFrame kf = new KeyFrame(Duration.millis(100), kv);
+        timeline.getKeyFrames().add(kf);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(100), defenderImage);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0);
+        fadeTransition.setAutoReverse(true);
+        fadeTransition.setCycleCount(2);
+
+        SequentialTransition sequentialTransition = new SequentialTransition(timeline, fadeTransition);
+        sequentialTransition.play();
+    }
 }

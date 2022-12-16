@@ -5,7 +5,9 @@ import com.hadouin.utils.GUI;
 import com.hadouin.utils.InputParser;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class Pokemon {
@@ -16,7 +18,7 @@ public class Pokemon {
     private int XP = 0;
     private byte LVL;
 
-    private Move[] moves;
+    private List<Move> moves;
     private Image back;
     private Image front;
     private Species specie;
@@ -35,17 +37,27 @@ public class Pokemon {
         this.back = getBackImage();
     }
 
-    private Move[] getBaseMoves() {
-        Move[] possiblemoves = new Move[4];
+    private List<Move> getBaseMoves() {
+        List<Move> possiblemoves = new ArrayList<>(4);
         int i = 0;
-        for ( Map.Entry<BaseMove, Integer> baseMoveEntry : specie.moveSet.entrySet()) {
+        for ( Map.Entry<Move, Integer> baseMoveEntry : specie.moveSet.entrySet()) {
             if (baseMoveEntry.getValue() <= this.LVL && i < 4){
-                possiblemoves[i] = baseMoveEntry.getKey().buildAttack();
+                possiblemoves.add(baseMoveEntry.getKey());
                 i++;
             }
         }
         return possiblemoves;
+    }
 
+    public void learnMove(Move move){
+        if (this.moves.size() == 4){
+            askAttackToRemove();
+        } else {
+            this.moves.add(move);
+        }
+    }
+
+    private void askAttackToRemove() {
     }
 
     private Image getFrontImage() {
@@ -55,21 +67,6 @@ public class Pokemon {
     private Image getBackImage() {
         return new Image(Main.class.getResourceAsStream("PokemonSprites/" + specie.name + "/back.png"));
     }
-
-    Pokemon(Species evolveTo, Pokemon p){
-        this.specie = evolveTo;
-        name = specie.name;
-        type = specie.type;
-        XP = p.XP;
-        this.LVL = this.calcLVL();
-        moves = getBaseMoves();
-        this.stats = p.stats;
-        calculateStats(this.LVL);
-        this.battleStats = stats.clone();
-        this.front = getFrontImage();
-        this.back = getBackImage();
-    }
-
     public static class Builder {
         // Params obligatoires
         private final Species specie;
@@ -90,8 +87,36 @@ public class Pokemon {
     // ALL about XP
     public void earnXP(int xpGain) {
         this.XP += xpGain;
-        this.calculateStats(this.calcLVL());
+        this.LVL = this.calcLVL();
+        this.calculateStats(this.LVL);
+        if (this.specie.evolvesAt == this.LVL){
+            evolve();
+        }
+        for (Move move: getNewMoves()) {
+            learnMove(move);
+        }
     }
+
+    private List<Move> getNewMoves() {
+        List<Move> possiblemoves = new ArrayList<>();
+        for ( Map.Entry<Move, Integer> baseMoveEntry : specie.moveSet.entrySet()) {
+            if (baseMoveEntry.getValue() == this.LVL){
+                possiblemoves.add(baseMoveEntry.getKey());
+            }
+        }
+        return possiblemoves;
+    }
+
+    private void evolve() {
+        this.specie = this.specie.evolvesTo;
+        name = specie.name;
+        type = specie.type;
+        calculateStats(this.LVL);
+        this.battleStats = stats.clone();
+        this.front = getFrontImage();
+        this.back = getBackImage();
+    }
+
     public int getXPtoNext(){
         byte lvl = this.calcLVL();
         return Levels.FAST.tableXpLevel[lvl + 1] - Levels.FAST.tableXpLevel[lvl];
@@ -117,7 +142,7 @@ public class Pokemon {
     }
 
     public int getXPGain(){
-        return (this.specie.baseXP * this.calcLVL()) / 7;
+        return (this.specie.baseXP * this.LVL) / 7;
     }
 
     private void calculateStats(byte lvl) {
@@ -170,7 +195,7 @@ public class Pokemon {
     public Image getImageBack(){
         return this.back;
     }
-    public Move[] getAttacks() {
+    public List<Move> getAttacks() {
         return this.moves;
     }
 
